@@ -6,38 +6,45 @@ import {getPopularMovies} from '@/api/movies';
 import {HomeDrawerProps, RootStackProps} from '@/types/navigationType';
 import useGetPopularMovies from '@/hooks/useGetPopularMovies';
 import HorizontalList from '@/components/HorizontalList';
+import useGetTopRatedMovies from '@/hooks/useGetTopRatedMovies';
 
 type HomeScreenProps = HomeDrawerProps<'Home'>;
 
 const HomeScreen: FC<HomeScreenProps> = () => {
-  const {data, isLoading} = useGetPopularMovies();
+  const {popularMoviesData, isLoading} = useGetPopularMovies();
+  const {topRatedMoviesData} = useGetTopRatedMovies();
 
   const popularMovies = useMemo(() => {
-    if (!data) {
+    if (!popularMoviesData) {
       return [];
     }
-    return data.results.map(movie => ({
+    return popularMoviesData.results.map(movie => ({
       id: movie.id,
       imagePath: movie.poster_path,
     }));
-  }, [data]);
+  }, [popularMoviesData]);
+
+  const topRatedMovies = useMemo(() => {
+    if (!topRatedMoviesData) {
+      return [];
+    }
+    return topRatedMoviesData.results.map(movie => ({
+      id: movie.id,
+      imagePath: movie.poster_path,
+    }));
+  }, [topRatedMoviesData]);
+
   return (
     <View
       style={{
         flex: 1,
         backgroundColor: '#1B2126',
-        justifyContent: 'center',
-        alignItems: 'center',
+        padding: 10,
       }}>
       <View
         style={{
-          flex: 1,
-          width: '100%',
-          padding: 10,
-          paddingHorizontal: 10,
-          paddingVertical: 10,
+          paddingHorizontal: 5,
           borderRadius: 10,
-          overflow: 'hidden',
         }}>
         <Text
           style={{
@@ -49,6 +56,23 @@ const HomeScreen: FC<HomeScreenProps> = () => {
           Recent Popular Movies
         </Text>
         <HorizontalList data={popularMovies} />
+      </View>
+      <View
+        style={{
+          padding: 10,
+          paddingHorizontal: 10,
+          borderRadius: 10,
+        }}>
+        <Text
+          style={{
+            color: '#8899AA',
+            fontSize: 20,
+            fontWeight: 'bold',
+            padding: 10,
+          }}>
+          Top Rated Movies
+        </Text>
+        <HorizontalList data={topRatedMovies} />
       </View>
     </View>
   );

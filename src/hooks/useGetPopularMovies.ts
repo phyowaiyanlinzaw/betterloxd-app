@@ -9,7 +9,7 @@ export default function useGetPopularMovies() {
     queryFn: getPopularMovies,
   });
   return {
-    data,
+    popularMoviesData: data,
     error,
     isLoading,
     isError,
