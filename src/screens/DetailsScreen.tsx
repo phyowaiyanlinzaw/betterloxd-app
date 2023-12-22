@@ -6,9 +6,13 @@ type DetailsScreenProps = RootStackProps<'DetailsScreen'>;
 
 const DetailsScreen: FC<DetailsScreenProps> = () => {
   return (
-    <View>
-      <Text>DetailsScreen</Text>
-    </View>
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: '#1B2126',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}></View>
   );
 };
 
