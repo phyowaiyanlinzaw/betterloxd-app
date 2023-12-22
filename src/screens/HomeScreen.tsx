@@ -7,8 +7,10 @@ import {HomeDrawerProps, RootStackProps} from '@/types/navigationType';
 import useGetPopularMovies from '@/hooks/useGetPopularMovies';
 import HorizontalList from '@/components/HorizontalList';
 import useGetTopRatedMovies from '@/hooks/useGetTopRatedMovies';
+import {useNavigation} from '@react-navigation/native';
 
 type HomeScreenProps = HomeDrawerProps<'Home'>;
+type Navigation = HomeScreenProps['navigation'];
 
 const HomeScreen: FC<HomeScreenProps> = () => {
   const {popularMoviesData, isLoading} = useGetPopularMovies();
@@ -34,6 +36,8 @@ const HomeScreen: FC<HomeScreenProps> = () => {
     }));
   }, [topRatedMoviesData]);
 
+  const navigation = useNavigation<Navigation>();
+
   return (
     <View
       style={{
@@ -55,7 +59,14 @@ const HomeScreen: FC<HomeScreenProps> = () => {
           }}>
           Recent Popular Movies
         </Text>
-        <HorizontalList data={popularMovies} />
+        <HorizontalList
+          data={popularMovies}
+          onPressItem={id => {
+            navigation.navigate('DetailsScreen', {
+              movieId: id,
+            });
+          }}
+        />
       </View>
       <View
         style={{

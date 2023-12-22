@@ -10,7 +10,8 @@ type ListItem = {
 
 const HorizontalList: FC<{
   data: ListItem[];
-}> = ({data}) => {
+  onPressItem?: (id: number) => void;
+}> = ({data, onPressItem}) => {
   return (
     <View style={{}}>
       <FlatList
@@ -26,6 +27,9 @@ const HorizontalList: FC<{
                 borderRadius: 10,
                 overflow: 'hidden',
                 backgroundColor: '#8899AA',
+              }}
+              onPress={() => {
+                onPressItem && onPressItem(item.id);
               }}>
               <Image
                 style={{

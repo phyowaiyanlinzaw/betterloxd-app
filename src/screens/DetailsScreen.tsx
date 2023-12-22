@@ -1,7 +1,10 @@
 import {View, Text} from 'react-native';
-import React from 'react';
+import React, {FC} from 'react';
+import {RootStackParamsList, RootStackProps} from '@/types/navigationType';
 
-const DetailsScreen = () => {
+type DetailsScreenProps = RootStackProps<'DetailsScreen'>;
+
+const DetailsScreen: FC<DetailsScreenProps> = () => {
   return (
     <View>
       <Text>DetailsScreen</Text>
