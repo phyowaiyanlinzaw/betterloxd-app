@@ -11,7 +11,14 @@ const Drawer = createDrawerNavigator<HomeDrawerParamsList>();
 
 const AppDrawerNavigator = () => {
   return (
-    <Drawer.Navigator>
+    <Drawer.Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: '#15181D',
+        },
+        headerTitle: 'Betterloxd',
+        headerTintColor: '#8899AA',
+      }}>
       <Drawer.Screen name="Home" component={HomeScreen} />
     </Drawer.Navigator>
   );
