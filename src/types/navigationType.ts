@@ -1,12 +1,30 @@
+import {DrawerScreenProps} from '@react-navigation/drawer';
+import {
+  CompositeScreenProps,
+  NavigatorScreenParams,
+} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
 export type RootStackParamsList = {
-  HomeScreen: undefined;
+  HomeScreen: NavigatorScreenParams<HomeDrawerParamsList>;
   LoginScreen: undefined;
   RegisterScreen: undefined;
-  ProfileScreen: undefined;
-  DetailsScreen: undefined;
+  DetailsScreen: {
+    movieId: number;
+  };
+};
+
+export type HomeDrawerParamsList = {
+  Home: undefined;
+  WatchList: undefined;
+  Profile: undefined;
 };
 
 export type RootStackProps<T extends keyof RootStackParamsList> =
   NativeStackScreenProps<RootStackParamsList, T>;
+
+export type HomeDrawerProps<T extends keyof HomeDrawerParamsList> =
+  CompositeScreenProps<
+    DrawerScreenProps<HomeDrawerParamsList, T>,
+    RootStackProps<keyof RootStackParamsList>
+  >;

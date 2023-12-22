@@ -3,9 +3,9 @@ import React, {FC} from 'react';
 
 import {useQuery} from '@tanstack/react-query';
 import {getPopularMovies} from '@/api/movies';
-import {RootStackProps} from '@/types/navigationType';
+import {HomeDrawerProps, RootStackProps} from '@/types/navigationType';
 
-type HomeScreenProps = RootStackProps<'HomeScreen'>;
+type HomeScreenProps = HomeDrawerProps<'Home'>;
 
 const HomeScreen: FC<HomeScreenProps> = () => {
   const {data} = useQuery({
