@@ -1,3 +1,22 @@
 {
-  "extends": "@react-native/typescript-config/tsconfig.json"
+  "extends": "@react-native/typescript-config/tsconfig.json",
+  "compilerOptions": {
+    "paths": {
+      "@/*": ["./src/*"],
+      "components/*": ["./src/components/*"],
+      "assets/*": ["./src/assets/*"],
+      "screens/*": ["./src/screens/*"],
+      "navigations/*": ["./src/navigations/*"],
+      "utils/*": ["./src/utils/*"],
+      "hooks/*": ["./src/hooks/*"],
+      "contexts/*": ["./src/contexts/*"],
+      "services/*": ["./src/services/*"],
+      "types/*": ["./src/types/*"],
+      "styles/*": ["./src/styles/*"],
+      "constants/*": ["./src/constants/*"],
+      "libs/*": ["./src/libs/*"],
+      "axios-config/*": ["./src/libs/axios-config/*"],
+      "reactquery/*": ["./src/libs/reactquery/*"]
+    }
+  }
 }

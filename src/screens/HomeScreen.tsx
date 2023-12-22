@@ -1,8 +1,9 @@
 import {View, Text, TouchableOpacity, FlatList} from 'react-native';
 import React, {FC} from 'react';
-import {RootStackProps} from '../type';
+
 import {useQuery} from '@tanstack/react-query';
-import {getPopularMovies} from '../../api/movies';
+import {getPopularMovies} from '@/api/movies';
+import {RootStackProps} from '@/types/navigationType';
 
 type HomeScreenProps = RootStackProps<'HomeScreen'>;
 

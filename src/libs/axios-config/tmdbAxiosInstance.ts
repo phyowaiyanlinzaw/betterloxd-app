@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const axiosInstance = axios.create({
+const tmdbAxiosInstance = axios.create({
   baseURL: 'https://api.themoviedb.org/3/',
   headers: {
     'Content-Type': 'application/json',
@@ -11,4 +11,4 @@ const axiosInstance = axios.create({
   timeoutErrorMessage: 'Request timed out',
 });
 
-export default axiosInstance;
+export default tmdbAxiosInstance;
