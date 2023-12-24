@@ -62,7 +62,7 @@ const ScreenHeader: FC<AnimationProps> = ({sv, movieTitle, navigation}) => {
       <Text
         style={{
           color: '#8899AA',
-          fontSize: 20,
+          fontSize: 15,
           fontWeight: 'bold',
           padding: 10,
         }}
@@ -77,13 +77,14 @@ const ScreenHeader: FC<AnimationProps> = ({sv, movieTitle, navigation}) => {
           fontSize: 20,
           fontWeight: 'bold',
           padding: 10,
+          width: 200,
         }}>
         {movieTitle}
       </Animated.Text>
       <Text
         style={{
           color: '#8899AA',
-          fontSize: 20,
+          fontSize: 15,
           fontWeight: 'bold',
           padding: 10,
         }}>

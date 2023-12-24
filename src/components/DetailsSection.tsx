@@ -1,9 +1,7 @@
-import {playlist, PlaylistType} from '@/screens/DetailsScreen';
 import {Movie} from '@/types/movieType';
 import {getDetailsScreenConst} from '@/utils/getDetailsScreenConst';
 import {FC} from 'react';
 import {Text, View} from 'react-native';
-import tailwind from 'twrnc';
 import HorizontalList from './HorizontalList';
 
 type MovieProps = {
@@ -19,39 +17,6 @@ const DetailsSection: FC<MovieProps> = ({movie}) => {
         // backgroundColor: '#1B2126',
         padding: 10,
       }}>
-      {/* {playlist.map((song: PlaylistType, index: number) => {
-        return (
-          <View
-            style={tailwind.style(
-              'flex flex-row items-center justify-between py-2 mr-5',
-            )}
-            key={JSON.stringify(song.name + index)}>
-            <View style={tailwind.style('flex flex-row items-center')}>
-              <View
-                style={tailwind.style(
-                  'absolute w-10 flex-row items-center justify-center',
-                )}>
-                <Text
-                  style={tailwind.style(
-                    'text-sm text-center font-bold text-white opacity-50',
-                  )}>
-                  {index + 1}
-                </Text>
-              </View>
-              <View style={tailwind.style('pl-10')}>
-                <Text
-                  style={tailwind.style('text-base font-medium text-white')}>
-                  {song.name}
-                </Text>
-                <Text style={tailwind.style('text-sm text-white opacity-60')}>
-                  {formatter.format(song.plays)}
-                </Text>
-              </View>
-            </View>
-            <Text>Menu</Text>
-          </View>
-        );
-      })} */}
       <View
         style={{
           flexDirection: 'row',
@@ -91,13 +56,13 @@ const DetailsSection: FC<MovieProps> = ({movie}) => {
           alignItems: 'center',
           padding: 10,
         }}>
-        {movie?.genres.map(genre => {
+        {movie?.genres.slice(0, 3).map(genre => {
           return (
             <View
               style={{
-                padding: 10,
+                padding: 5,
                 backgroundColor: '#8899AA',
-                borderRadius: 10,
+                borderRadius: 7,
                 margin: 5,
               }}
               key={genre.id}>
@@ -182,7 +147,10 @@ const DetailsSection: FC<MovieProps> = ({movie}) => {
                   crew.job === 'Director' ||
                   crew.job === 'Writer' ||
                   crew.job === 'Screenplay' ||
-                  crew.job === 'Story'
+                  crew.job === 'Story' ||
+                  crew.job === 'Producer' ||
+                  crew.job === 'Executive Producer' ||
+                  crew.job === 'Original Music Composer'
                 );
               })
               .map(crew => ({
