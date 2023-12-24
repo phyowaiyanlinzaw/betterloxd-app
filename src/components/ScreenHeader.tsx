@@ -78,6 +78,7 @@ const ScreenHeader: FC<AnimationProps> = ({sv, movieTitle, navigation}) => {
           fontWeight: 'bold',
           padding: 10,
           width: 200,
+          textAlign: 'center',
         }}>
         {movieTitle}
       </Animated.Text>

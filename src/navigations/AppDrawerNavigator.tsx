@@ -6,6 +6,7 @@ import {
   RootStackParamsList,
 } from '@/types/navigationType';
 import HomeScreen from '@/screens/HomeScreen';
+import SearchScreen from '@/screens/SearchScreen';
 
 const Drawer = createDrawerNavigator<HomeDrawerParamsList>();
 
@@ -22,10 +23,20 @@ const AppDrawerNavigator = () => {
         drawerLabelStyle: {
           fontWeight: 'bold',
         },
+        drawerInactiveTintColor: '#8899AA',
       }}>
       <Drawer.Screen
         name={'Home'}
         component={HomeScreen}
+        options={{
+          headerStyle: {
+            backgroundColor: '#1B2126',
+          },
+        }}
+      />
+      <Drawer.Screen
+        name={'Search'}
+        component={SearchScreen}
         options={{
           headerStyle: {
             backgroundColor: '#1B2126',

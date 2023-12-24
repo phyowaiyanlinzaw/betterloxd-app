@@ -176,24 +176,29 @@ const DetailsSection: FC<MovieProps> = ({movie}) => {
             fontWeight: 'bold',
             padding: 10,
           }}>
-          Similar To This
+          Similar To This Film
         </Text>
         <HorizontalList
           data={
             movie?.similar.results
-              //   .filter(movie => {
-              //     movie.vote_average > 6;
-              //   })
-              .slice(0, 7)
-              .map(similar => ({
-                id: similar.id,
-                imagePath: similar.poster_path,
-                label: similar.title,
-              })) ?? []
+              // .filter(movie => {
+              //   movie.poster_path !== null;
+              // })
+              .map(movie => ({
+                id: movie.id,
+                imagePath: movie.poster_path,
+                label: movie.title,
+              }))
+              .slice(0, 10)
+              .filter(movie => movie.imagePath !== null) ?? []
+
+            // .map(similar => ({
+            //   id: similar.id,
+            //   imagePath: similar.poster_path,
+            //   label: similar.title,
+            // }))
           }
-          onPressItem={id => {
-            console.log(id);
-          }}
+          onPressItem={id => {}}
         />
       </View>
     </View>

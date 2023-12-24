@@ -16,7 +16,7 @@ export type RootStackParamsList = {
 
 export type HomeDrawerParamsList = {
   Home: undefined;
-  WatchList: undefined;
+  Search: undefined;
   Profile: undefined;
 };
 
