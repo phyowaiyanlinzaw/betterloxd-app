@@ -7,6 +7,7 @@ export type Movie = {
   overview: string;
   popularity: number;
   poster_path: string;
+  backdrop_path: string;
   release_date: string;
   title: string;
   vote_average: number;
@@ -24,6 +25,14 @@ export type Movie = {
       name: string;
       profile_path: string;
       job: string;
+    }[];
+  };
+  similar: {
+    results: {
+      id: number;
+      title: string;
+      poster_path: string;
+      vote_average: number;
     }[];
   };
 };

@@ -1,7 +1,7 @@
 import {View, Text} from 'react-native';
 import React from 'react';
 import {useQuery} from '@tanstack/react-query';
-import {getTopRatedMovies} from '@/api/movies';
+import {getTopRatedMovies} from '@/api/moviesApi';
 
 export default function useGetTopRatedMovies() {
   const {data, isLoading} = useQuery({

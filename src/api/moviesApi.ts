@@ -1,5 +1,6 @@
 import tmdbAxiosInstance from '@/libs/axios-config/tmdbAxiosInstance';
 import {Movie} from '@/types/movieType';
+import {QueryFunctionContext} from '@tanstack/react-query';
 import {AxiosResponse} from 'axios';
 
 export const getPopularMovies = async () => {
@@ -24,6 +25,18 @@ export const getTopRatedMovies = async () => {
       total_pages: number;
       total_results: number;
     }> = await tmdbAxiosInstance.get('movie/top_rated');
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getMovieDetails = async ({queryKey}: QueryFunctionContext) => {
+  try {
+    const [_key, movieId] = queryKey;
+    const response: AxiosResponse<Movie> = await tmdbAxiosInstance.get(
+      `movie/${movieId}`,
+    );
     return response.data;
   } catch (error) {
     console.log(error);

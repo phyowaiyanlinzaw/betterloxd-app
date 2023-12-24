@@ -68,7 +68,7 @@ const HorizontalList: FC<{
             )}
           </View>
         )}
-        keyExtractor={item => item.id.toString()}
+        keyExtractor={item => (Math.random() * 100 * item.id).toString()}
       />
     </View>
   );
