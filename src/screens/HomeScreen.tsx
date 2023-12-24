@@ -2,7 +2,7 @@ import {View, Text, TouchableOpacity, FlatList} from 'react-native';
 import React, {FC, useEffect, useMemo} from 'react';
 
 import {useQuery} from '@tanstack/react-query';
-import {getPopularMovies} from '@/api/movies';
+import {getPopularMovies} from '@/api/moviesApi';
 import {HomeDrawerProps, RootStackProps} from '@/types/navigationType';
 import useGetPopularMovies from '@/hooks/useGetPopularMovies';
 import HorizontalList from '@/components/HorizontalList';
