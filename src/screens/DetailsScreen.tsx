@@ -1,44 +1,24 @@
-import {
-  View,
-  Text,
-  Dimensions,
-  StyleSheet,
-  LayoutChangeEvent,
-  Pressable,
-  Image,
-} from 'react-native';
-import React, {FC, useMemo} from 'react';
-import {RootStackParamsList, RootStackProps} from '@/types/navigationType';
+import {Text, Pressable, ActivityIndicator} from 'react-native';
+import React, {FC, useEffect} from 'react';
+import {RootStackProps} from '@/types/navigationType';
 import Animated, {
-  Extrapolation,
-  SharedValue,
   interpolate,
   useAnimatedScrollHandler,
   useAnimatedStyle,
   useSharedValue,
 } from 'react-native-reanimated';
-import LinearGradient from 'react-native-linear-gradient';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import tailwind from 'twrnc';
 import useGetMovieDetails from '@/hooks/useGetMovieDetails';
 import {useNavigation} from '@react-navigation/native';
+import ScreenHeader from '@/components/ScreenHeader';
+import {getDetailsScreenConst} from '@/utils/getDetailsScreenConst';
+import PosterImage from '@/components/PosterImage';
+import DetailsSection from '@/components/DetailsSection';
 
 type DetailsScreenProps = RootStackProps<'DetailsScreen'>;
 
 type Navigation = DetailsScreenProps['navigation'];
-
-const formatter = Intl.NumberFormat('en-IN');
-
-const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient);
-
-const posterSize = Dimensions.get('screen').height / 2;
-const headerTop = 44 - 16;
-type AnimationProps = {
-  sv: SharedValue<number>;
-  posterPath?: string;
-  backdropPath?: string;
-  movieTitle?: string;
-};
 
 export type PlaylistType = {
   name: string;
@@ -177,10 +157,13 @@ export const playlist: PlaylistType[] = [
 
 const DetailsScreen: FC<DetailsScreenProps> = ({route}) => {
   const navigation = useNavigation<Navigation>();
+  const {formatter, AnimatedLinearGradient, posterSize, headerTop} =
+    getDetailsScreenConst();
 
   const {movieDetailsData, isLoading} = useGetMovieDetails(
     route.params.movieId,
   );
+
   const inset = useSafeAreaInsets();
   const sv = useSharedValue<number>(0);
   const scrollHandler = useAnimatedScrollHandler({
@@ -217,12 +200,27 @@ const DetailsScreen: FC<DetailsScreenProps> = ({route}) => {
       ],
     };
   });
-  return (
+  return isLoading ? (
+    <ActivityIndicator
+      size={50}
+      color={'#fff'}
+      style={{
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#1B2126',
+      }}
+    />
+  ) : (
     <Animated.View style={[tailwind.style('flex-1 bg-black')]}>
-      <ScreenHeader sv={sv} />
+      <ScreenHeader
+        sv={sv}
+        movieTitle={movieDetailsData?.title}
+        navigation={navigation}
+      />
       <PosterImage
         sv={sv}
-        posterPath={movieDetailsData?.backdrop_path}
+        posterPath={movieDetailsData?.poster_path}
         movieTitle={movieDetailsData?.title}
         backdropPath={movieDetailsData?.backdrop_path}
       />
@@ -233,46 +231,30 @@ const DetailsScreen: FC<DetailsScreenProps> = ({route}) => {
           style={tailwind.style('flex-1')}
           showsVerticalScrollIndicator={false}>
           <Animated.View style={[animatedScrollStyle, tailwind.style('pb-10')]}>
-            {/* Button Section */}
-            {/* <Animated.View
-              onLayout={(event: LayoutChangeEvent) => {
-                'worklet';
-                layoutY.value = event.nativeEvent.layout.y;
-              }}
-              style={[
-                tailwind.style(
-                  'flex items-center justify-center z-10 pb-4 pt-4',
-                ),
-                stickyElement,
-              ]}>
-              <Pressable
-                style={tailwind.style(
-                  'bg-green-500 px-10 py-2 items-center rounded-full',
-                )}>
-                <Text
-                  style={tailwind.style(
-                    'text-base font-bold text-white uppercase',
-                  )}>
-                  Shuffle Play
-                </Text>
-              </Pressable>
-            </Animated.View> */}
             <Animated.View
-              style={tailwind.style(
-                'flex items-start justify-center pb-3 pt-4 bg-black',
-              )}>
+              style={
+                // tailwind.style('flex items-start justify-center pb-3 pt-4 bg-black')
+                {
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  paddingBottom: 10,
+                  paddingTop: 10,
+                }
+              }>
               <Pressable
                 style={tailwind.style('px-10 items-start rounded-full')}>
                 <Text
-                  style={tailwind.style(
-                    'text-[18px] tracking-[.15] font-bold text-white',
-                  )}>
-                  Popular
+                  style={{
+                    color: '#8899AA',
+                    fontSize: 20,
+                    fontWeight: 'bold',
+                  }}>
+                  {movieDetailsData?.title}
                 </Text>
               </Pressable>
             </Animated.View>
             {/* Songs List */}
-            <Playlist />
+            <DetailsSection movie={movieDetailsData!} />
           </Animated.View>
         </Animated.ScrollView>
       </Animated.View>
@@ -280,221 +262,4 @@ const DetailsScreen: FC<DetailsScreenProps> = ({route}) => {
   );
 };
 
-const ScreenHeader: FC<AnimationProps> = ({sv}) => {
-  const inset = useSafeAreaInsets();
-  const opacityAnim = useAnimatedStyle(() => {
-    return {
-      opacity: interpolate(
-        sv.value,
-        [
-          ((posterSize - (headerTop + inset.top)) / 4) * 3,
-          posterSize - (headerTop + inset.top) + 1,
-        ],
-        [0, 1],
-      ),
-      transform: [
-        {
-          scale: interpolate(
-            sv.value,
-            [
-              ((posterSize - (headerTop + inset.top)) / 4) * 3,
-              posterSize - (headerTop + inset.top) + 1,
-            ],
-            [0.98, 1],
-            Extrapolation.CLAMP,
-          ),
-        },
-        {
-          translateY: interpolate(
-            sv.value,
-            [
-              ((posterSize - (headerTop + inset.top)) / 4) * 3,
-              posterSize - (headerTop + inset.top) + 1,
-            ],
-            [-10, 0],
-            Extrapolation.CLAMP,
-          ),
-        },
-      ],
-      paddingTop: inset.top === 0 ? 8 : inset.top,
-    };
-  });
-  return (
-    <Animated.View
-      style={[
-        tailwind.style(
-          'absolute w-full px-4 pb-2 flex flex-row items-start justify-between z-10 bg-black',
-        ),
-        opacityAnim,
-      ]}>
-      <Text
-        style={{
-          color: '#8899AA',
-          fontSize: 20,
-          fontWeight: 'bold',
-          padding: 10,
-        }}>
-        Back
-      </Text>
-      <Animated.Text style={tailwind.style('text-xl text-white font-medium')}>
-        John Krasinski
-      </Animated.Text>
-      <Text
-        style={{
-          color: '#8899AA',
-          fontSize: 20,
-          fontWeight: 'bold',
-          padding: 10,
-        }}>
-        Menu
-      </Text>
-    </Animated.View>
-  );
-};
-
-const PosterImage: FC<AnimationProps> = ({sv, posterPath, backdropPath}) => {
-  const inset = useSafeAreaInsets();
-  const layoutY = useSharedValue(0);
-  const opacityAnim = useAnimatedStyle(() => {
-    return {
-      opacity: interpolate(
-        sv.value,
-        [0, posterSize - (headerTop + inset.top) / 0.9],
-        [1, 0],
-        Extrapolation.CLAMP,
-      ),
-    };
-  });
-  const textAnim = useAnimatedStyle(() => {
-    return {
-      opacity: interpolate(
-        sv.value,
-        [-posterSize / 8, 0, posterSize - (headerTop + inset.top) / 0.8],
-        [0, 1, 0],
-        Extrapolation.CLAMP,
-      ),
-      transform: [
-        {
-          scale: interpolate(
-            sv.value,
-            [-posterSize / 8, 0, (posterSize - (headerTop + inset.top)) / 2],
-            [1.1, 1, 0.95],
-            'clamp',
-          ),
-        },
-        {
-          translateY: interpolate(
-            sv.value,
-            [layoutY.value - 1, layoutY.value, layoutY.value + 1],
-            [0, 0, -1],
-          ),
-        },
-      ],
-    };
-  });
-  const scaleAnim = useAnimatedStyle(() => {
-    return {
-      transform: [
-        {
-          scale: interpolate(sv.value, [-50, 0], [1.3, 1], {
-            extrapolateLeft: 'extend',
-            extrapolateRight: 'clamp',
-          }),
-        },
-      ],
-    };
-  });
-  return (
-    <Animated.View style={[styles.imageContainer, opacityAnim]}>
-      <Animated.Image
-        style={[styles.imageStyle, scaleAnim]}
-        src={`https://image.tmdb.org/t/p/original${backdropPath}`}
-      />
-      <Animated.View
-        onLayout={(event: LayoutChangeEvent) => {
-          'worklet';
-          layoutY.value = event.nativeEvent.layout.y;
-        }}
-        style={[
-          tailwind.style(
-            'absolute bottom-0 top-0 left-0 right-0 justify-end items-center px-5  z-10',
-          ),
-          textAnim,
-        ]}>
-        {/* <Animated.Text
-          numberOfLines={2}
-          style={tailwind.style('text-6xl font-bold text-white text-center')}>
-          {movieTitle}
-        </Animated.Text> */}
-        <Animated.Image
-          style={tailwind.style('w-30 h-40  rounded-2 ')}
-          src={`https://image.tmdb.org/t/p/original${posterPath}`}></Animated.Image>
-      </Animated.View>
-      <AnimatedLinearGradient
-        style={[tailwind.style('absolute inset-0'), scaleAnim]}
-        colors={[
-          `rgba(0,0,0,${0})`,
-          `rgba(0,0,0,${0.1})`,
-          `rgba(0,0,0,${0.3})`,
-          `rgba(0,0,0,${0.5})`,
-          `rgba(0,0,0,${0.8})`,
-          `rgba(0,0,0,${1})`,
-        ]}
-      />
-    </Animated.View>
-  );
-};
-
-const Playlist = () => {
-  return (
-    <View style={tailwind.style('bg-black')}>
-      {playlist.map((song: PlaylistType, index: number) => {
-        return (
-          <View
-            style={tailwind.style(
-              'flex flex-row items-center justify-between py-2 mr-5',
-            )}
-            key={JSON.stringify(song.name + index)}>
-            <View style={tailwind.style('flex flex-row items-center')}>
-              <View
-                style={tailwind.style(
-                  'absolute w-10 flex-row items-center justify-center',
-                )}>
-                <Text
-                  style={tailwind.style(
-                    'text-sm text-center font-bold text-white opacity-50',
-                  )}>
-                  {index + 1}
-                </Text>
-              </View>
-              <View style={tailwind.style('pl-10')}>
-                <Text
-                  style={tailwind.style('text-base font-medium text-white')}>
-                  {song.name}
-                </Text>
-                <Text style={tailwind.style('text-sm text-white opacity-60')}>
-                  {formatter.format(song.plays)}
-                </Text>
-              </View>
-            </View>
-            <Text>Menu</Text>
-          </View>
-        );
-      })}
-    </View>
-  );
-};
-
-const styles = StyleSheet.create({
-  imageContainer: {
-    height: Dimensions.get('screen').height / 2,
-    width: Dimensions.get('screen').width,
-    position: 'absolute',
-  },
-  imageStyle: {
-    height: '100%',
-    width: '100%',
-    resizeMode: 'cover',
-  },
-});
 export default DetailsScreen;

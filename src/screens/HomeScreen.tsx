@@ -20,10 +20,12 @@ const HomeScreen: FC<HomeScreenProps> = () => {
     if (!popularMoviesData) {
       return [];
     }
-    return popularMoviesData.results.map(movie => ({
-      id: movie.id,
-      imagePath: movie.poster_path,
-    }));
+    return popularMoviesData.results
+      .filter(movie => movie.vote_average > 6.5)
+      .map(movie => ({
+        id: movie.id,
+        imagePath: movie.poster_path,
+      }));
   }, [popularMoviesData]);
 
   const topRatedMovies = useMemo(() => {

@@ -27,4 +27,12 @@ export type Movie = {
       job: string;
     }[];
   };
+  similar: {
+    results: {
+      id: number;
+      title: string;
+      poster_path: string;
+      vote_average: number;
+    }[];
+  };
 };
