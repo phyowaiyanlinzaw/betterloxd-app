@@ -1,7 +1,7 @@
 import {AnimationProps} from '@/types/AnimationPropsType';
 import {getDetailsScreenConst} from '@/utils/getDetailsScreenConst';
-import {FC} from 'react';
-import {Text} from 'react-native';
+import {FC, useState} from 'react';
+import {Text, View} from 'react-native';
 import Animated, {
   Extrapolation,
   interpolate,
@@ -9,6 +9,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import tailwind from 'twrnc';
+import Modal from 'react-native-modal';
 
 const ScreenHeader: FC<AnimationProps> = ({sv, movieTitle, navigation}) => {
   const inset = useSafeAreaInsets();
@@ -51,6 +52,12 @@ const ScreenHeader: FC<AnimationProps> = ({sv, movieTitle, navigation}) => {
       paddingTop: inset.top === 0 ? 8 : inset.top,
     };
   });
+
+  const [isModalVisible, setModalVisible] = useState(false);
+
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+  };
   return (
     <Animated.View
       style={[
@@ -88,9 +95,80 @@ const ScreenHeader: FC<AnimationProps> = ({sv, movieTitle, navigation}) => {
           fontSize: 15,
           fontWeight: 'bold',
           padding: 10,
-        }}>
+        }}
+        onPress={toggleModal}>
         Menu
       </Text>
+      <Modal
+        isVisible={isModalVisible}
+        animationIn={'bounceInUp'}
+        animationOut={'bounceOutDown'}
+        style={{
+          justifyContent: 'flex-end',
+          margin: 0,
+        }}
+        onBackdropPress={toggleModal}
+        onBackButtonPress={toggleModal}>
+        <View
+          style={{
+            backgroundColor: '#15181D',
+            height: 150,
+            width: '100%',
+            borderTopLeftRadius: 10,
+            borderTopRightRadius: 10,
+            padding: 10,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}>
+          <View
+            style={{
+              padding: 10,
+              backgroundColor: '#8899AA',
+              borderRadius: 7,
+              margin: 5,
+            }}>
+            <Text
+              style={{
+                color: '#fff',
+                fontSize: 15,
+                fontWeight: 'bold',
+              }}
+              onPress={() => {
+                toggleModal();
+                navigation.navigate('Home');
+              }}>
+              To Watch
+            </Text>
+          </View>
+          <Text
+            style={{
+              color: '#8899AA',
+              fontSize: 15,
+              fontWeight: 'bold',
+              padding: 10,
+            }}
+            onPress={() => {
+              toggleModal();
+              navigation.navigate('Search');
+            }}>
+            Watched
+          </Text>
+          <Text
+            style={{
+              color: '#8899AA',
+              fontSize: 15,
+              fontWeight: 'bold',
+              padding: 10,
+            }}
+            onPress={() => {
+              toggleModal();
+              navigation.navigate('Settings');
+            }}>
+            Love
+          </Text>
+        </View>
+      </Modal>
     </Animated.View>
   );
 };

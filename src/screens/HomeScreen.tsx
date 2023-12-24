@@ -85,7 +85,14 @@ const HomeScreen: FC<HomeScreenProps> = () => {
           }}>
           Top Rated Movies
         </Text>
-        <HorizontalList data={topRatedMovies} />
+        <HorizontalList
+          data={topRatedMovies}
+          onPressItem={id => {
+            navigation.navigate('DetailsScreen', {
+              movieId: id,
+            });
+          }}
+        />
       </View>
     </View>
   );

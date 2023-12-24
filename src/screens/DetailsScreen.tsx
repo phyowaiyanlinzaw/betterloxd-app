@@ -1,4 +1,4 @@
-import {Text, Pressable, ActivityIndicator} from 'react-native';
+import {Text, Pressable, ActivityIndicator, View} from 'react-native';
 import React, {FC, useEffect} from 'react';
 import {RootStackProps} from '@/types/navigationType';
 import Animated, {
@@ -224,6 +224,7 @@ const DetailsScreen: FC<DetailsScreenProps> = ({route}) => {
         movieTitle={movieDetailsData?.title}
         backdropPath={movieDetailsData?.backdrop_path}
       />
+
       <Animated.View style={tailwind.style('flex-1')}>
         <Animated.ScrollView
           onScroll={scrollHandler}
