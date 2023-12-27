@@ -1,13 +1,12 @@
-import {View, Text, TouchableOpacity, FlatList} from 'react-native';
-import React, {FC, useEffect, useMemo} from 'react';
+import {View, Text} from 'react-native';
+import React, {FC, useMemo} from 'react';
 
-import {useQuery} from '@tanstack/react-query';
-import {getPopularMovies} from '@/api/moviesApi';
-import {HomeDrawerProps, RootStackProps} from '@/types/navigationType';
+import {HomeDrawerProps} from '@/types/navigationType';
 import useGetPopularMovies from '@/hooks/useGetPopularMovies';
 import HorizontalList from '@/components/HorizontalList';
 import useGetTopRatedMovies from '@/hooks/useGetTopRatedMovies';
 import {useNavigation} from '@react-navigation/native';
+import useGetUpcomingMovies from '@/hooks/useGetUpcomingMovies';
 
 type HomeScreenProps = HomeDrawerProps<'Home'>;
 type Navigation = HomeScreenProps['navigation'];
@@ -15,6 +14,7 @@ type Navigation = HomeScreenProps['navigation'];
 const HomeScreen: FC<HomeScreenProps> = () => {
   const {popularMoviesData, isLoading} = useGetPopularMovies();
   const {topRatedMoviesData} = useGetTopRatedMovies();
+  const {upcomingMoviesData} = useGetUpcomingMovies();
 
   const popularMovies = useMemo(() => {
     if (!popularMoviesData) {
@@ -37,6 +37,16 @@ const HomeScreen: FC<HomeScreenProps> = () => {
       imagePath: movie.poster_path,
     }));
   }, [topRatedMoviesData]);
+
+  const upcomingMovies = useMemo(() => {
+    if (!upcomingMoviesData) {
+      return [];
+    }
+    return upcomingMoviesData.results.map(movie => ({
+      id: movie.id,
+      imagePath: movie.poster_path,
+    }));
+  }, [upcomingMoviesData]);
 
   const navigation = useNavigation<Navigation>();
 
@@ -72,8 +82,7 @@ const HomeScreen: FC<HomeScreenProps> = () => {
       </View>
       <View
         style={{
-          padding: 10,
-          paddingHorizontal: 10,
+          paddingHorizontal: 5,
           borderRadius: 10,
         }}>
         <Text
@@ -87,6 +96,29 @@ const HomeScreen: FC<HomeScreenProps> = () => {
         </Text>
         <HorizontalList
           data={topRatedMovies}
+          onPressItem={id => {
+            navigation.navigate('DetailsScreen', {
+              movieId: id,
+            });
+          }}
+        />
+      </View>
+      <View
+        style={{
+          paddingHorizontal: 5,
+          borderRadius: 10,
+        }}>
+        <Text
+          style={{
+            color: '#8899AA',
+            fontSize: 20,
+            fontWeight: 'bold',
+            padding: 10,
+          }}>
+          Upcoming Movies
+        </Text>
+        <HorizontalList
+          data={upcomingMovies}
           onPressItem={id => {
             navigation.navigate('DetailsScreen', {
               movieId: id,

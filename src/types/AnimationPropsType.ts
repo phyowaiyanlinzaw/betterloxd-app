@@ -5,5 +5,5 @@ export type AnimationProps = {
   posterPath?: string;
   backdropPath?: string;
   movieTitle?: string;
-  navigation?: any;
+  onBackNav?: () => void;
 };

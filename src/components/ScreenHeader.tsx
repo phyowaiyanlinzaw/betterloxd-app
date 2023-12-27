@@ -11,7 +11,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import tailwind from 'twrnc';
 import Modal from 'react-native-modal';
 
-const ScreenHeader: FC<AnimationProps> = ({sv, movieTitle, navigation}) => {
+const ScreenHeader: FC<AnimationProps> = ({sv, movieTitle, onBackNav}) => {
   const inset = useSafeAreaInsets();
   const {formatter, AnimatedLinearGradient, posterSize, headerTop} =
     getDetailsScreenConst();
@@ -73,9 +73,7 @@ const ScreenHeader: FC<AnimationProps> = ({sv, movieTitle, navigation}) => {
           fontWeight: 'bold',
           padding: 10,
         }}
-        onPress={() => {
-          navigation.goBack();
-        }}>
+        onPress={onBackNav}>
         Back
       </Text>
       <Animated.Text
@@ -136,7 +134,6 @@ const ScreenHeader: FC<AnimationProps> = ({sv, movieTitle, navigation}) => {
               }}
               onPress={() => {
                 toggleModal();
-                navigation.navigate('Home');
               }}>
               To Watch
             </Text>
@@ -150,7 +147,6 @@ const ScreenHeader: FC<AnimationProps> = ({sv, movieTitle, navigation}) => {
             }}
             onPress={() => {
               toggleModal();
-              navigation.navigate('Search');
             }}>
             Watched
           </Text>
@@ -163,7 +159,6 @@ const ScreenHeader: FC<AnimationProps> = ({sv, movieTitle, navigation}) => {
             }}
             onPress={() => {
               toggleModal();
-              navigation.navigate('Settings');
             }}>
             Love
           </Text>

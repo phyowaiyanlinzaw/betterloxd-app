@@ -2,7 +2,10 @@ import axios from 'axios';
 
 const tmdbAxiosInstance = axios.create({
   baseURL: 'https://api.themoviedb.org/3/',
-  params: {append_to_response: 'credits,similar', language: 'en-US'},
+  params: {
+    append_to_response: 'credits,similar',
+    language: 'en-US',
+  },
   headers: {
     'Content-Type': 'application/json',
     Authorization:

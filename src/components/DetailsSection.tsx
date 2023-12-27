@@ -6,9 +6,10 @@ import HorizontalList from './HorizontalList';
 
 type MovieProps = {
   movie: Movie;
+  onPressSimiliarMovie: (id: number) => void;
 };
 
-const DetailsSection: FC<MovieProps> = ({movie}) => {
+const DetailsSection: FC<MovieProps> = ({movie, onPressSimiliarMovie}) => {
   const {formatter, AnimatedLinearGradient, posterSize, headerTop} =
     getDetailsScreenConst();
   return (
@@ -121,9 +122,6 @@ const DetailsSection: FC<MovieProps> = ({movie}) => {
             label: cast.name,
             sublabel: cast.character,
           }))}
-          onPressItem={id => {
-            console.log(id);
-          }}
         />
       </View>
       <View
@@ -160,9 +158,6 @@ const DetailsSection: FC<MovieProps> = ({movie}) => {
                 sublabel: crew.job,
               })) ?? []
           }
-          onPressItem={id => {
-            console.log(id);
-          }}
         />
       </View>
       <View
@@ -198,7 +193,9 @@ const DetailsSection: FC<MovieProps> = ({movie}) => {
             //   label: similar.title,
             // }))
           }
-          onPressItem={id => {}}
+          onPressItem={id => {
+            onPressSimiliarMovie(id);
+          }}
         />
       </View>
     </View>
