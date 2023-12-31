@@ -1,14 +1,16 @@
 import {View, Text} from 'react-native';
 import React, {FC, useMemo} from 'react';
 
-import {HomeDrawerProps} from '@/types/navigationType';
+import {HomeDrawerProps, RootStackProps} from '@/types/navigationType';
 import useGetPopularMovies from '@/hooks/useGetPopularMovies';
 import HorizontalList from '@/components/HorizontalList';
 import useGetTopRatedMovies from '@/hooks/useGetTopRatedMovies';
 import {useNavigation} from '@react-navigation/native';
 import useGetUpcomingMovies from '@/hooks/useGetUpcomingMovies';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import {storage} from '@/db/storage';
 
-type HomeScreenProps = HomeDrawerProps<'Home'>;
+type HomeScreenProps = RootStackProps<'HomeScreen'>;
 type Navigation = HomeScreenProps['navigation'];
 
 const HomeScreen: FC<HomeScreenProps> = () => {
@@ -55,76 +57,158 @@ const HomeScreen: FC<HomeScreenProps> = () => {
       style={{
         flex: 1,
         backgroundColor: '#1B2126',
-        padding: 10,
       }}>
       <View
         style={{
-          paddingHorizontal: 5,
-          borderRadius: 10,
+          backgroundColor: '#1B2126',
+          padding: 10,
         }}>
-        <Text
+        <View
           style={{
-            color: '#8899AA',
-            fontSize: 20,
-            fontWeight: 'bold',
-            padding: 10,
+            paddingHorizontal: 5,
+            borderRadius: 10,
           }}>
-          Recent Popular Movies
-        </Text>
-        <HorizontalList
-          data={popularMovies}
-          onPressItem={id => {
-            navigation.navigate('DetailsScreen', {
-              movieId: id,
-            });
-          }}
-        />
+          <Text
+            style={{
+              color: '#8899AA',
+              fontSize: 20,
+              fontWeight: 'bold',
+              padding: 10,
+            }}>
+            {/* Recent Popular Movies */}
+            {storage.getString('user.name')}
+          </Text>
+          <HorizontalList
+            data={popularMovies}
+            onPressItem={id => {
+              navigation.navigate('DetailsScreen', {
+                movieId: id,
+              });
+            }}
+          />
+        </View>
+        <View
+          style={{
+            paddingHorizontal: 5,
+            borderRadius: 10,
+          }}>
+          <Text
+            style={{
+              color: '#8899AA',
+              fontSize: 20,
+              fontWeight: 'bold',
+              padding: 10,
+            }}>
+            Top Rated Movies
+          </Text>
+          <HorizontalList
+            data={topRatedMovies}
+            onPressItem={id => {
+              navigation.navigate('DetailsScreen', {
+                movieId: id,
+              });
+            }}
+          />
+        </View>
+        <View
+          style={{
+            paddingHorizontal: 5,
+            borderRadius: 10,
+          }}>
+          <Text
+            style={{
+              color: '#8899AA',
+              fontSize: 20,
+              fontWeight: 'bold',
+              padding: 10,
+            }}>
+            Upcoming Movies
+          </Text>
+          <HorizontalList
+            data={upcomingMovies}
+            onPressItem={id => {
+              navigation.navigate('DetailsScreen', {
+                movieId: id,
+              });
+            }}
+          />
+        </View>
       </View>
       <View
         style={{
-          paddingHorizontal: 5,
+          flexDirection: 'row',
+          justifyContent: 'space-around',
+          width: '100%',
+          backgroundColor: '#15181D',
+          height: 80,
           borderRadius: 10,
+          padding: 10,
+          marginVertical: 10,
+          alignItems: 'center',
         }}>
-        <Text
+        <TouchableOpacity
           style={{
-            color: '#8899AA',
-            fontSize: 20,
-            fontWeight: 'bold',
+            backgroundColor: '#1B2126',
             padding: 10,
+            borderRadius: 10,
           }}>
-          Top Rated Movies
-        </Text>
-        <HorizontalList
-          data={topRatedMovies}
-          onPressItem={id => {
-            navigation.navigate('DetailsScreen', {
-              movieId: id,
-            });
-          }}
-        />
-      </View>
-      <View
-        style={{
-          paddingHorizontal: 5,
-          borderRadius: 10,
-        }}>
-        <Text
+          <Text
+            style={{
+              color: '#1B2',
+              fontSize: 15,
+              fontWeight: 'bold',
+            }}>
+            Home
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
           style={{
-            color: '#8899AA',
-            fontSize: 20,
-            fontWeight: 'bold',
+            backgroundColor: '#1B2126',
             padding: 10,
-          }}>
-          Upcoming Movies
-        </Text>
-        <HorizontalList
-          data={upcomingMovies}
-          onPressItem={id => {
-            navigation.navigate('DetailsScreen', {
-              movieId: id,
-            });
+            borderRadius: 10,
           }}
-        />
+          onPress={() => {
+            navigation.navigate('SearchScreen');
+          }}>
+          <Text
+            style={{
+              color: '#1B2',
+              fontSize: 15,
+              fontWeight: 'bold',
+            }}>
+            Search
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{
+            backgroundColor: '#1B2126',
+            padding: 10,
+            borderRadius: 10,
+          }}>
+          <Text
+            style={{
+              color: '#1B2',
+              fontSize: 15,
+              fontWeight: 'bold',
+            }}>
+            Watchlist
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{
+            backgroundColor: '#1B2126',
+            padding: 10,
+            borderRadius: 10,
+          }}>
+          <Text
+            style={{
+              color: '#1B2',
+              fontSize: 15,
+              fontWeight: 'bold',
+            }}>
+            Profile
+          </Text>
+        </TouchableOpacity>
       </View>
     </View>
   );

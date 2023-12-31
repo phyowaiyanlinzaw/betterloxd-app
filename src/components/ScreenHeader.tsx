@@ -1,6 +1,6 @@
 import {AnimationProps} from '@/types/AnimationPropsType';
 import {getDetailsScreenConst} from '@/utils/getDetailsScreenConst';
-import {FC, useState} from 'react';
+import React, {FC, useState} from 'react';
 import {Text, View} from 'react-native';
 import Animated, {
   Extrapolation,
@@ -10,6 +10,7 @@ import Animated, {
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import tailwind from 'twrnc';
 import Modal from 'react-native-modal';
+import {HeartIcon} from '@/assets/icons';
 
 const ScreenHeader: FC<AnimationProps> = ({sv, movieTitle, onBackNav}) => {
   const inset = useSafeAreaInsets();
@@ -110,14 +111,14 @@ const ScreenHeader: FC<AnimationProps> = ({sv, movieTitle, onBackNav}) => {
         <View
           style={{
             backgroundColor: '#15181D',
-            height: 150,
+            height: 200,
             width: '100%',
             borderTopLeftRadius: 10,
             borderTopRightRadius: 10,
             padding: 10,
             flexDirection: 'row',
-            justifyContent: 'space-between',
             alignItems: 'center',
+            justifyContent: 'space-between',
           }}>
           <View
             style={{
@@ -138,30 +139,26 @@ const ScreenHeader: FC<AnimationProps> = ({sv, movieTitle, onBackNav}) => {
               To Watch
             </Text>
           </View>
-          <Text
+          <View
             style={{
-              color: '#8899AA',
-              fontSize: 15,
-              fontWeight: 'bold',
-              padding: 10,
-            }}
-            onPress={() => {
-              toggleModal();
-            }}>
-            Watched
-          </Text>
-          <Text
+              width: 50,
+              height: 50,
+              margin: 5,
+            }}></View>
+          <View
             style={{
-              color: '#8899AA',
-              fontSize: 15,
-              fontWeight: 'bold',
-              padding: 10,
-            }}
-            onPress={() => {
-              toggleModal();
+              width: 50,
+              height: 50,
+              margin: 5,
             }}>
-            Love
-          </Text>
+            <HeartIcon
+              onPress={() => {}}
+              style={{
+                width: '100%',
+                height: '100%',
+              }}
+            />
+          </View>
         </View>
       </Modal>
     </Animated.View>

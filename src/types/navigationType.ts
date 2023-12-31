@@ -6,18 +6,22 @@ import {
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
 export type RootStackParamsList = {
-  HomeScreen: NavigatorScreenParams<HomeDrawerParamsList>;
+  // HomeScreen: NavigatorScreenParams<HomeDrawerParamsList>;
+  HomeScreen: undefined;
   LoginScreen: undefined;
   RegisterScreen: undefined;
   DetailsScreen: {
     movieId: number;
   };
+  SearchScreen: undefined;
+  ProfileScreen: undefined;
 };
 
 export type HomeDrawerParamsList = {
   Home: undefined;
   Search: undefined;
   Profile: undefined;
+  Logout: undefined;
 };
 
 export type RootStackProps<T extends keyof RootStackParamsList> =

@@ -1,0 +1,13 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "Phyo Phyo Lay",
+      "email": "phyo2lay@email.com",
+      "favs": [901362, 1075794],
+      "password": "123456",
+      "watched": [695721, 572802],
+      "watchlist": [1029575, 787699]
+    }
+  ]
+}

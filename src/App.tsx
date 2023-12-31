@@ -8,7 +8,10 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
-      <SafeAreaProvider>
+      <SafeAreaProvider
+        style={{
+          backgroundColor: '#1B2126',
+        }}>
         <NavigationContainer>
           <AppStackNavigator />
         </NavigationContainer>
