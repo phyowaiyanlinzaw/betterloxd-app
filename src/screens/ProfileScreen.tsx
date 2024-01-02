@@ -14,8 +14,10 @@ type Navigation = Props['navigation'];
 
 const ProfileScreen: FC<Props> = () => {
   const navigation = useNavigation<Navigation>();
-  const {userFavMovies} = useGetUserFavMovies();
+  const {userFavMovies, refetchFavs} = useGetUserFavMovies();
   const {userWatchList} = useGetUserWatchList();
+
+  refetchFavs();
 
   const favMoviesData = useMemo(() => {
     if (!userFavMovies) {

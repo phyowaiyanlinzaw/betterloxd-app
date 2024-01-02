@@ -1,5 +1,7 @@
 import tmdbAxiosInstance from '@/libs/axios-config/tmdbAxiosInstance';
+import usersAxiosInstance from '@/libs/axios-config/usersAxiosInstance';
 import {Movie} from '@/types/movieType';
+import {User} from '@/types/userType';
 import {Query, QueryFunctionContext} from '@tanstack/react-query';
 import {AxiosResponse} from 'axios';
 
@@ -47,7 +49,13 @@ export const getUserFavMoviesList = async ({
   queryKey,
 }: QueryFunctionContext) => {
   try {
-    const [_key, favMovies] = queryKey as [string, number[]];
+    const [_key, userId] = queryKey;
+    const user: AxiosResponse<User> = await usersAxiosInstance.get(
+      `/${userId}`,
+    );
+
+    const favMovies: number[] = user.data.favs;
+
     const result: Movie[] = [];
     const fetchFavMovies = async () => {
       for (const movieId of favMovies) {

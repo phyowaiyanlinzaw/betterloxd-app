@@ -10,11 +10,12 @@ import Animated, {
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import tailwind from 'twrnc';
 import Modal from 'react-native-modal';
-import {HeartIcon} from '@/assets/icons';
+import {AddIcon, HeartIcon} from '@/assets/icons';
 // import useAddToFav from '@/hooks/useAddToFav';
 import {useMutation} from '@tanstack/react-query';
-import {addToFav} from '@/api/usersApi';
+import {addToFav, addToWatchList} from '@/api/usersApi';
 import currentUser from '@/utils/getCurrentUser';
+import queryClient from '@/libs/reactquery/queryClient';
 
 const ScreenHeader: FC<AnimationProps> = ({sv, movie, onBackNav}) => {
   const inset = useSafeAreaInsets();
@@ -62,13 +63,23 @@ const ScreenHeader: FC<AnimationProps> = ({sv, movie, onBackNav}) => {
 
   // const {addToFav} = useAddToFav();
 
+  const addToWatchListMutation = useMutation({
+    mutationFn: addToWatchList,
+    mutationKey: ['add-to-watch-list'],
+  });
+
   const {mutateAsync} = useMutation({
     mutationKey: ['add-to-fav'],
     mutationFn: addToFav,
+    onSuccess: () => {},
   });
 
   const handleAddToFav = async (movieId: number) => {
     await mutateAsync(movieId);
+  };
+
+  const handleAddToWatchList = async (movieId: number) => {
+    await addToWatchListMutation.mutateAsync(movieId);
   };
 
   const toggleModal = () => {
@@ -126,33 +137,37 @@ const ScreenHeader: FC<AnimationProps> = ({sv, movie, onBackNav}) => {
         <View
           style={{
             backgroundColor: '#15181D',
-            height: 200,
-            width: '100%',
+            height: 150,
+
             borderTopLeftRadius: 10,
             borderTopRightRadius: 10,
             padding: 10,
             flexDirection: 'row',
             alignItems: 'center',
-            justifyContent: 'space-between',
+            justifyContent: 'center',
           }}>
           <View
             style={{
-              padding: 10,
-              backgroundColor: '#8899AA',
-              borderRadius: 7,
+              width: 50,
+              height: 50,
               margin: 5,
             }}>
-            <Text
+            <AddIcon
+              onPress={
+                currentUser
+                  ? () => {
+                      handleAddToWatchList(movie?.id!);
+                      toggleModal();
+                    }
+                  : () => {
+                      toggleModal();
+                    }
+              }
               style={{
-                color: '#fff',
-                fontSize: 15,
-                fontWeight: 'bold',
+                width: '100%',
+                height: '100%',
               }}
-              onPress={() => {
-                toggleModal();
-              }}>
-              To Watch
-            </Text>
+            />
           </View>
           <View
             style={{

@@ -4,10 +4,24 @@
       "id": 1,
       "name": "Phyo Phyo Lay",
       "email": "phyo2lay@email.com",
-      "favs": [695721, 572802],
+      "favs": [
+        901362,
+        1075794,
+        240,
+        680,
+        787699,
+        129,
+        12477,
+        637,
+        385687,
+        891699
+      ],
       "password": "123456",
-      "watched": [695721, 572802],
-      "watchlist": [572802, 787699],
+      "watchlist": [
+        572802,
+        787699,
+        14062
+      ],
       "isLoggedInBefore": true
     }
   ]

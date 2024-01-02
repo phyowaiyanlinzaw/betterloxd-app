@@ -1,4 +1,4 @@
-import {View, Text} from 'react-native';
+import {View, Text, Pressable} from 'react-native';
 import React from 'react';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {
@@ -49,12 +49,34 @@ const AppDrawerNavigator = () => {
       <Drawer.Screen
         name={'Profile'}
         component={ProfileScreen}
-        options={{
+        options={({navigation}) => ({
           headerShadowVisible: false,
           headerStyle: {
             backgroundColor: '#1B2126',
           },
-        }}
+          headerRight: () => {
+            return (
+              <View
+                style={{
+                  marginRight: 10,
+                }}>
+                <Pressable
+                  onPress={() => {
+                    navigation.navigate('LoginScreen');
+                  }}>
+                  <Text
+                    style={{
+                      color: '#8899AA',
+                      fontSize: 15,
+                      fontWeight: 'bold',
+                    }}>
+                    Log Out
+                  </Text>
+                </Pressable>
+              </View>
+            );
+          },
+        })}
       />
     </Drawer.Navigator>
   );
