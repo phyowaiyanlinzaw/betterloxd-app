@@ -1,10 +1,24 @@
 import {View, Text, TextInput, TouchableOpacity} from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import {RootStackProps} from '@/types/navigationType';
-
+import {z} from 'zod';
 type LogInScreenProps = RootStackProps<'LoginScreen'>;
 
 const LogInScreen = () => {
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [usernameInput, setUsernameInput] = useState<string>('');
+  const [passwordInput, setPasswordInput] = useState<string>('');
+
+  const logInSchema = z.object({
+    email: z.string().email(),
+    password: z.string().min(8).max(20),
+  });
+
+  type LogInSchemaType = z.infer<typeof logInSchema>;
+
+  const handleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
   return (
     <View
       style={{
@@ -39,10 +53,15 @@ const LogInScreen = () => {
           }}
           placeholder="Username"
           placeholderTextColor="#8899AA"
+          cursorColor={'#8899AA'}
+          selectionColor={'#8899AA'}
+          value={usernameInput}
+          onChangeText={text => {
+            setUsernameInput(text);
+          }}
         />
-        <TextInput
+        <View
           style={{
-            color: '#8899AA',
             marginTop: 20,
             marginBottom: 10,
             width: 200,
@@ -51,10 +70,26 @@ const LogInScreen = () => {
             borderWidth: 1,
             borderRadius: 10,
             padding: 10,
-          }}
-          placeholder="Password"
-          placeholderTextColor="#8899AA"
-        />
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}>
+          <TextInput
+            style={{
+              color: '#8899AA',
+            }}
+            placeholder="Password"
+            placeholderTextColor="#8899AA"
+          />
+          <TouchableOpacity onPress={handleShowPassword}>
+            <Text
+              style={{
+                color: '#8899AA',
+              }}>
+              {showPassword ? 'Hide' : 'Show'}
+            </Text>
+          </TouchableOpacity>
+        </View>
         <TouchableOpacity
           style={{
             marginTop: 20,
