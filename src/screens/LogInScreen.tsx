@@ -15,6 +15,7 @@ import {zodResolver} from '@hookform/resolvers/zod';
 import {getWidthHeightStuff} from '@/utils/getWidthHeightStuff';
 import {useNavigation} from '@react-navigation/native';
 import {WarningIcon} from '@/assets/icons';
+import {storage} from '@/db/storage';
 
 type LogInScreenProps = RootStackProps<'LoginScreen'>;
 type Navigation = LogInScreenProps['navigation'];
@@ -63,6 +64,9 @@ const LogInScreen: FC<LogInScreenProps> = () => {
     console.log(value);
     usersList!.map(user => {
       if (user.email === value.email && user.password === value.password) {
+        console.log('success', user);
+        // user.isLoggedInBefore = true;
+        storage.set('currentUser', JSON.stringify(user));
         navigation.navigate('HomeScreen', {
           screen: 'Home',
         });

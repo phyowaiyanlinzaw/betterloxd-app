@@ -8,6 +8,7 @@ import {
 import HomeScreen from '@/screens/HomeScreen';
 import SearchScreen from '@/screens/SearchScreen';
 import LogInScreen from '@/screens/LogInScreen';
+import ProfileScreen from '@/screens/ProfileScreen';
 
 const Drawer = createDrawerNavigator<HomeDrawerParamsList>();
 
@@ -44,16 +45,16 @@ const AppDrawerNavigator = () => {
           },
         }}
       />
-      {/* <Drawer.Screen
-        name={'Logout'}
-        component={LogInScreen}
+      <Drawer.Screen
+        name={'Profile'}
+        component={ProfileScreen}
         options={{
           header: () => null,
           headerStyle: {
             backgroundColor: '#1B2126',
           },
         }}
-      /> */}
+      />
     </Drawer.Navigator>
   );
 };

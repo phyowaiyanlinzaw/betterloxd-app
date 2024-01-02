@@ -7,11 +7,15 @@ import LogInScreen from '@/screens/LogInScreen';
 import AppDrawerNavigator from './AppDrawerNavigator';
 import {useState} from 'react';
 import {Text, TouchableOpacity} from 'react-native';
+import {storage} from '@/db/storage';
+import {User} from '@/types/userType';
 
 const Stack = createNativeStackNavigator<RootStackParamsList>();
 
 const AppStackNavigator = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const jsonUser = storage.getString('currentUser');
+
+  const currentUser: User = JSON.parse(jsonUser!);
   return (
     <Stack.Navigator
       screenOptions={{
@@ -19,7 +23,9 @@ const AppStackNavigator = () => {
           backgroundColor: '#15181D',
         },
       }}
-      initialRouteName={isAuthenticated ? 'HomeScreen' : 'LoginScreen'}>
+      initialRouteName={
+        currentUser.isLoggedInBefore ? 'HomeScreen' : 'LoginScreen'
+      }>
       <Stack.Screen
         name={'HomeScreen'}
         component={AppDrawerNavigator}

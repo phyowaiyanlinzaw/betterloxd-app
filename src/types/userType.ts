@@ -6,4 +6,5 @@ export type User = {
   password: string;
   watched: number[];
   watchlist: number[];
+  isLoggedInBefore: boolean;
 };

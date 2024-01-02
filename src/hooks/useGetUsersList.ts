@@ -2,12 +2,14 @@ import {View, Text} from 'react-native';
 import React from 'react';
 import {useQuery} from '@tanstack/react-query';
 import {getUsersList} from '@/api/usersApi';
+import {User} from '@/types/userType';
 
 const useGetUsersList = () => {
   const {data, isLoading, isError, error} = useQuery({
     queryKey: ['users-list'],
     queryFn: getUsersList,
   });
+
   return {
     usersList: data,
     isLoadingUsersList: isLoading,

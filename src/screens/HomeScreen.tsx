@@ -50,6 +50,8 @@ const HomeScreen: FC<HomeScreenProps> = () => {
   }, [upcomingMoviesData]);
 
   const navigation = useNavigation<Navigation>();
+  const jsonUser = storage.getString('currentUser');
+  const currentUser = JSON.parse(jsonUser!);
 
   return (
     <ScrollView
