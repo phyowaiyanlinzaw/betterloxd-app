@@ -43,6 +43,46 @@ export const getMovieDetails = async ({queryKey}: QueryFunctionContext) => {
   }
 };
 
+export const getUserFavMoviesList = async ({
+  queryKey,
+}: QueryFunctionContext) => {
+  try {
+    const [_key, favMovies] = queryKey as [string, number[]];
+    const result: Movie[] = [];
+    const fetchFavMovies = async () => {
+      for (const movieId of favMovies) {
+        const response: AxiosResponse<Movie> = await tmdbAxiosInstance.get(
+          `movie/${movieId}`,
+        );
+        result.push(response.data);
+      }
+    };
+    await fetchFavMovies();
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getUserWatchList = async ({queryKey}: QueryFunctionContext) => {
+  try {
+    const [_key, watchList] = queryKey as [string, number[]];
+    const result: Movie[] = [];
+    const fetchWatchList = async () => {
+      for (const movieId of watchList) {
+        const response: AxiosResponse<Movie> = await tmdbAxiosInstance.get(
+          `movie/${movieId}`,
+        );
+        result.push(response.data);
+      }
+    };
+    await fetchWatchList();
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const searchMovies = async ({queryKey}: QueryFunctionContext) => {
   try {
     const [_key, query] = queryKey;

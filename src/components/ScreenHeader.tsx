@@ -11,8 +11,12 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import tailwind from 'twrnc';
 import Modal from 'react-native-modal';
 import {HeartIcon} from '@/assets/icons';
+// import useAddToFav from '@/hooks/useAddToFav';
+import {useMutation} from '@tanstack/react-query';
+import {addToFav} from '@/api/usersApi';
+import currentUser from '@/utils/getCurrentUser';
 
-const ScreenHeader: FC<AnimationProps> = ({sv, movieTitle, onBackNav}) => {
+const ScreenHeader: FC<AnimationProps> = ({sv, movie, onBackNav}) => {
   const inset = useSafeAreaInsets();
   const {formatter, AnimatedLinearGradient, posterSize, headerTop} =
     getDetailsScreenConst();
@@ -56,6 +60,17 @@ const ScreenHeader: FC<AnimationProps> = ({sv, movieTitle, onBackNav}) => {
 
   const [isModalVisible, setModalVisible] = useState(false);
 
+  // const {addToFav} = useAddToFav();
+
+  const {mutateAsync} = useMutation({
+    mutationKey: ['add-to-fav'],
+    mutationFn: addToFav,
+  });
+
+  const handleAddToFav = async (movieId: number) => {
+    await mutateAsync(movieId);
+  };
+
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
@@ -86,7 +101,7 @@ const ScreenHeader: FC<AnimationProps> = ({sv, movieTitle, onBackNav}) => {
           width: 200,
           textAlign: 'center',
         }}>
-        {movieTitle}
+        {movie?.title!}
       </Animated.Text>
       <Text
         style={{
@@ -152,7 +167,16 @@ const ScreenHeader: FC<AnimationProps> = ({sv, movieTitle, onBackNav}) => {
               margin: 5,
             }}>
             <HeartIcon
-              onPress={() => {}}
+              onPress={
+                currentUser
+                  ? () => {
+                      handleAddToFav(movie?.id!);
+                      toggleModal();
+                    }
+                  : () => {
+                      toggleModal();
+                    }
+              }
               style={{
                 width: '100%',
                 height: '100%',

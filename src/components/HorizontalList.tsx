@@ -13,7 +13,10 @@ const HorizontalList: FC<{
   onPressItem?: (id: number) => void;
 }> = ({data, onPressItem}) => {
   return (
-    <View style={{}}>
+    <View
+      style={{
+        marginBottom: 10,
+      }}>
       <FlatList
         horizontal
         data={data}

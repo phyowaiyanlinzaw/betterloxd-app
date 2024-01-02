@@ -87,7 +87,7 @@ const DetailsScreen: FC<DetailsScreenProps> = ({route}) => {
     <Animated.View style={[tailwind.style('flex-1 bg-black')]}>
       <ScreenHeader
         sv={sv}
-        movieTitle={movieDetailsData?.title}
+        movie={movieDetailsData!}
         onBackNav={() => {
           navigation.canGoBack() && navigation.goBack();
         }}
@@ -95,7 +95,7 @@ const DetailsScreen: FC<DetailsScreenProps> = ({route}) => {
       <PosterImage
         sv={sv}
         posterPath={movieDetailsData?.poster_path}
-        movieTitle={movieDetailsData?.title}
+        movie={movieDetailsData!}
         backdropPath={movieDetailsData?.backdrop_path}
       />
 

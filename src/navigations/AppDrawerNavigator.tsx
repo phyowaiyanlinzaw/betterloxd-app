@@ -26,6 +26,7 @@ const AppDrawerNavigator = () => {
           fontWeight: 'bold',
         },
         drawerInactiveTintColor: '#8899AA',
+        headerShadowVisible: false,
       }}>
       <Drawer.Screen
         name={'Home'}
@@ -49,7 +50,7 @@ const AppDrawerNavigator = () => {
         name={'Profile'}
         component={ProfileScreen}
         options={{
-          header: () => null,
+          headerShadowVisible: false,
           headerStyle: {
             backgroundColor: '#1B2126',
           },
