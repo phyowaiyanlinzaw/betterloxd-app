@@ -6,8 +6,7 @@ import {
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
 export type RootStackParamsList = {
-  // HomeScreen: NavigatorScreenParams<HomeDrawerParamsList>;
-  HomeScreen: undefined;
+  HomeScreen: NavigatorScreenParams<HomeDrawerParamsList>;
   LoginScreen: undefined;
   RegisterScreen: undefined;
   DetailsScreen: {

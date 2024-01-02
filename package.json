@@ -32,7 +32,8 @@
     "react-native-vector-icons": "^10.0.3",
     "react-redux": "^9.0.4",
     "twrnc": "^3.6.7",
-    "zod": "^3.22.4"
+    "zod": "^3.22.4",
+    "@hookform/resolvers": "^3.3.2"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

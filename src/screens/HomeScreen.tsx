@@ -1,4 +1,4 @@
-import {View, Text} from 'react-native';
+import {View, Text, TouchableOpacity, ScrollView} from 'react-native';
 import React, {FC, useMemo} from 'react';
 
 import {HomeDrawerProps, RootStackProps} from '@/types/navigationType';
@@ -7,10 +7,9 @@ import HorizontalList from '@/components/HorizontalList';
 import useGetTopRatedMovies from '@/hooks/useGetTopRatedMovies';
 import {useNavigation} from '@react-navigation/native';
 import useGetUpcomingMovies from '@/hooks/useGetUpcomingMovies';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import {storage} from '@/db/storage';
 
-type HomeScreenProps = RootStackProps<'HomeScreen'>;
+type HomeScreenProps = HomeDrawerProps<'Home'>;
 type Navigation = HomeScreenProps['navigation'];
 
 const HomeScreen: FC<HomeScreenProps> = () => {
@@ -53,7 +52,7 @@ const HomeScreen: FC<HomeScreenProps> = () => {
   const navigation = useNavigation<Navigation>();
 
   return (
-    <View
+    <ScrollView
       style={{
         flex: 1,
         backgroundColor: '#1B2126',
@@ -75,8 +74,7 @@ const HomeScreen: FC<HomeScreenProps> = () => {
               fontWeight: 'bold',
               padding: 10,
             }}>
-            {/* Recent Popular Movies */}
-            {storage.getString('user.name')}
+            Recent Popular Movies
           </Text>
           <HorizontalList
             data={popularMovies}
@@ -134,83 +132,7 @@ const HomeScreen: FC<HomeScreenProps> = () => {
           />
         </View>
       </View>
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-around',
-          width: '100%',
-          backgroundColor: '#15181D',
-          height: 80,
-          borderRadius: 10,
-          padding: 10,
-          marginVertical: 10,
-          alignItems: 'center',
-        }}>
-        <TouchableOpacity
-          style={{
-            backgroundColor: '#1B2126',
-            padding: 10,
-            borderRadius: 10,
-          }}>
-          <Text
-            style={{
-              color: '#1B2',
-              fontSize: 15,
-              fontWeight: 'bold',
-            }}>
-            Home
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={{
-            backgroundColor: '#1B2126',
-            padding: 10,
-            borderRadius: 10,
-          }}
-          onPress={() => {
-            navigation.navigate('SearchScreen');
-          }}>
-          <Text
-            style={{
-              color: '#1B2',
-              fontSize: 15,
-              fontWeight: 'bold',
-            }}>
-            Search
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={{
-            backgroundColor: '#1B2126',
-            padding: 10,
-            borderRadius: 10,
-          }}>
-          <Text
-            style={{
-              color: '#1B2',
-              fontSize: 15,
-              fontWeight: 'bold',
-            }}>
-            Watchlist
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={{
-            backgroundColor: '#1B2126',
-            padding: 10,
-            borderRadius: 10,
-          }}>
-          <Text
-            style={{
-              color: '#1B2',
-              fontSize: 15,
-              fontWeight: 'bold',
-            }}>
-            Profile
-          </Text>
-        </TouchableOpacity>
-      </View>
-    </View>
+    </ScrollView>
   );
 };
 
