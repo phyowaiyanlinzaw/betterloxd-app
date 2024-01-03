@@ -15,6 +15,7 @@ import {current} from '@reduxjs/toolkit';
 import currentUser from '@/utils/getCurrentUser';
 import {useQuery} from '@tanstack/react-query';
 import {getCurrentUser} from '@/api/usersApi';
+import TestScreen from '@/screens/TestScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamsList>();
 
@@ -25,9 +26,6 @@ const AppStackNavigator = () => {
     queryKey: ['currentUser'],
     queryFn: getCurrentUser,
   });
-
-  console.log('logged in or not', data?.isLoggedInBefore);
-
   return (
     <Stack.Navigator
       screenOptions={{
@@ -35,7 +33,10 @@ const AppStackNavigator = () => {
           backgroundColor: '#15181D',
         },
       }}
-      initialRouteName={data?.isLoggedInBefore ? 'HomeScreen' : 'LoginScreen'}>
+      initialRouteName={
+        // data?.isLoggedInBefore ? 'HomeScreen' : 'LoginScreen'
+        'TestScreen'
+      }>
       <Stack.Screen
         name={'HomeScreen'}
         component={AppDrawerNavigator}
@@ -86,6 +87,13 @@ const AppStackNavigator = () => {
         options={({navigation}) => ({
           headerShown: false,
         })}
+      />
+      <Stack.Screen
+        name={'TestScreen'}
+        component={TestScreen}
+        options={{
+          headerShown: false,
+        }}
       />
     </Stack.Navigator>
   );

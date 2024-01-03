@@ -16,6 +16,8 @@ import {getWidthHeightStuff} from '@/utils/getWidthHeightStuff';
 import {useNavigation} from '@react-navigation/native';
 import {WarningIcon} from '@/assets/icons';
 import {storage} from '@/db/storage';
+import {User} from '@/types/userType';
+import {useMMKV, useMMKVObject} from 'react-native-mmkv';
 
 type LogInScreenProps = RootStackProps<'LoginScreen'>;
 type Navigation = LogInScreenProps['navigation'];
@@ -24,17 +26,16 @@ const LogInScreen: FC<LogInScreenProps> = () => {
   const navigation = useNavigation<Navigation>();
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [usernameInput, setUsernameInput] = useState<string>('');
-  const [passwordInput, setPasswordInput] = useState<string>('');
   const [isRegisterBtnPressed, setIsRegisterBtnPressed] =
     useState<boolean>(false);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
   const logInSchema = z.object({
     email: z.string().email() || z.string().min(8),
     password: z.string(),
   });
+
+  const [user, setUser] = useMMKVObject<User>('currentUser');
 
   type LogInSchemaType = z.infer<typeof logInSchema>;
 
@@ -58,37 +59,21 @@ const LogInScreen: FC<LogInScreenProps> = () => {
   };
 
   const {usersList} = useGetUsersList();
-  console.log('usersList', usersList);
   const {RPH, RPW} = getWidthHeightStuff();
 
   const handleLogin: SubmitHandler<LogInSchemaType> = value => {
-    console.log(value);
-    // usersList!.map(user => {
-    //   if (user.email === value.email && user.password === value.password) {
-    //     user.isLoggedInBefore = true;
-    //     storage.set('currentUser', JSON.stringify(user));
-    //     navigation.navigate('HomeScreen', {
-    //       screen: 'Home',
-    //     });
-    //     return;
-    //   } else {
-    //     setIsModalVisible(true);
-    //   }
-    // });
-    for (let i = 0; i < usersList!.length; i++) {
-      if (
-        usersList![i].email === value.email &&
-        usersList![i].password === value.password
-      ) {
-        usersList![i].isLoggedInBefore = true;
-        storage.set('currentUser', JSON.stringify(usersList![i]));
+    for (let user of usersList!) {
+      if (user.email === value.email && user.password === value.password) {
+        storage.delete('currentUser');
+        console.log('user found', user);
+        user.isLoggedInBefore = true;
+        storage.set('currentUser', JSON.stringify(user));
         navigation.navigate('HomeScreen', {
           screen: 'Home',
         });
         break;
       }
-
-      if (i === usersList!.length - 1) {
+      if (user === usersList![usersList!.length - 1]) {
         setIsModalVisible(true);
       }
     }

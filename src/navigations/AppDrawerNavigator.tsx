@@ -10,6 +10,8 @@ import SearchScreen from '@/screens/SearchScreen';
 import LogInScreen from '@/screens/LogInScreen';
 import ProfileScreen from '@/screens/ProfileScreen';
 import currentUser from '@/utils/getCurrentUser';
+import {storage} from '@/db/storage';
+import {MMKV} from 'react-native-mmkv';
 
 const Drawer = createDrawerNavigator<HomeDrawerParamsList>();
 
@@ -63,8 +65,13 @@ const AppDrawerNavigator = () => {
                 }}>
                 <Pressable
                   onPress={() => {
+                    storage.delete('currentUser');
+                    console.log('Log out', currentUser);
                     currentUser.isLoggedInBefore = false;
-                    navigation.navigate('LoginScreen');
+                    navigation.reset({
+                      index: 0,
+                      routes: [{name: 'LoginScreen'}],
+                    });
                   }}>
                   <Text
                     style={{

@@ -51,6 +51,8 @@ const ProfileScreen: FC<Props> = () => {
     queryFn: getCurrentUser,
   });
 
+  console.log(data);
+
   return (
     <ScrollView
       style={{

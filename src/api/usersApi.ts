@@ -83,6 +83,7 @@ export const getUser = async ({queryKey}: QueryFunctionContext) => {
 };
 
 export const getCurrentUser = async () => {
+  console.log('getCurrentUserId', currentUser.id);
   try {
     const response: AxiosResponse<User> = await usersAxiosInstance.get(
       `/${currentUser.id}`,

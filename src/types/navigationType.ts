@@ -13,7 +13,7 @@ export type RootStackParamsList = {
     movieId: number;
   };
   SearchScreen: undefined;
-  ProfileScreen: undefined;
+  TestScreen: undefined;
 };
 
 export type HomeDrawerParamsList = {
