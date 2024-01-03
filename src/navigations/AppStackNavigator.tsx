@@ -9,13 +9,25 @@ import {useState} from 'react';
 import {Text, TouchableOpacity} from 'react-native';
 import {storage} from '@/db/storage';
 import {User} from '@/types/userType';
+import RegisterScreen from '@/screens/RegisterScreen';
+import useGetUser from '@/hooks/useGetUser';
+import {current} from '@reduxjs/toolkit';
+import currentUser from '@/utils/getCurrentUser';
+import {useQuery} from '@tanstack/react-query';
+import {getCurrentUser} from '@/api/usersApi';
 
 const Stack = createNativeStackNavigator<RootStackParamsList>();
 
 const AppStackNavigator = () => {
   const jsonUser = storage.getString('currentUser');
 
-  const currentUser: User = JSON.parse(jsonUser!);
+  const {data} = useQuery({
+    queryKey: ['currentUser'],
+    queryFn: getCurrentUser,
+  });
+
+  console.log('logged in or not', data?.isLoggedInBefore);
+
   return (
     <Stack.Navigator
       screenOptions={{
@@ -23,9 +35,7 @@ const AppStackNavigator = () => {
           backgroundColor: '#15181D',
         },
       }}
-      initialRouteName={
-        currentUser.isLoggedInBefore ? 'HomeScreen' : 'LoginScreen'
-      }>
+      initialRouteName={data?.isLoggedInBefore ? 'HomeScreen' : 'LoginScreen'}>
       <Stack.Screen
         name={'HomeScreen'}
         component={AppDrawerNavigator}
@@ -69,6 +79,13 @@ const AppStackNavigator = () => {
         options={{
           headerShown: false,
         }}
+      />
+      <Stack.Screen
+        name={'RegisterScreen'}
+        component={RegisterScreen}
+        options={({navigation}) => ({
+          headerShown: false,
+        })}
       />
     </Stack.Navigator>
   );

@@ -9,6 +9,7 @@ import HomeScreen from '@/screens/HomeScreen';
 import SearchScreen from '@/screens/SearchScreen';
 import LogInScreen from '@/screens/LogInScreen';
 import ProfileScreen from '@/screens/ProfileScreen';
+import currentUser from '@/utils/getCurrentUser';
 
 const Drawer = createDrawerNavigator<HomeDrawerParamsList>();
 
@@ -62,6 +63,7 @@ const AppDrawerNavigator = () => {
                 }}>
                 <Pressable
                   onPress={() => {
+                    currentUser.isLoggedInBefore = false;
                     navigation.navigate('LoginScreen');
                   }}>
                   <Text

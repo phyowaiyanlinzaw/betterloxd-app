@@ -5,38 +5,39 @@ import {
   TouchableOpacity,
   TouchableHighlight,
 } from 'react-native';
-import Modal from 'react-native-modal';
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, useState} from 'react';
 import {RootStackProps} from '@/types/navigationType';
-import {z} from 'zod';
+import Modal from 'react-native-modal';
 import useGetUsersList from '@/hooks/useGetUsersList';
-import {Controller, SubmitHandler, useForm} from 'react-hook-form';
-import {zodResolver} from '@hookform/resolvers/zod';
 import {getWidthHeightStuff} from '@/utils/getWidthHeightStuff';
+import {
+  Controller,
+  FormSubmitHandler,
+  SubmitHandler,
+  useForm,
+} from 'react-hook-form';
 import {useNavigation} from '@react-navigation/native';
+import {z} from 'zod';
+import {zodResolver} from '@hookform/resolvers/zod';
+import {useMutation} from '@tanstack/react-query';
+import {registerUser} from '@/api/usersApi';
+import {User} from '@/types/userType';
 import {WarningIcon} from '@/assets/icons';
-import {storage} from '@/db/storage';
+type Props = RootStackProps<'RegisterScreen'>;
 
-type LogInScreenProps = RootStackProps<'LoginScreen'>;
-type Navigation = LogInScreenProps['navigation'];
+type Navigation = Props['navigation'];
 
-const LogInScreen: FC<LogInScreenProps> = () => {
+const RegisterScreen: FC<Props> = () => {
+  const {usersList} = useGetUsersList();
+  const {RPH, RPW} = getWidthHeightStuff();
   const navigation = useNavigation<Navigation>();
 
-  const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [usernameInput, setUsernameInput] = useState<string>('');
-  const [passwordInput, setPasswordInput] = useState<string>('');
-  const [isRegisterBtnPressed, setIsRegisterBtnPressed] =
-    useState<boolean>(false);
-  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-
-  const logInSchema = z.object({
+  const registerSchema = z.object({
     email: z.string().email() || z.string().min(8),
-    password: z.string(),
+    password: z.string().min(8),
   });
 
-  type LogInSchemaType = z.infer<typeof logInSchema>;
+  type RegisterSchemaType = z.infer<typeof registerSchema>;
 
   const {
     control,
@@ -44,54 +45,49 @@ const LogInScreen: FC<LogInScreenProps> = () => {
     reset,
     setValue,
     formState: {errors, isValid, isDirty},
-  } = useForm<LogInSchemaType>({
+  } = useForm<RegisterSchemaType>({
     defaultValues: {
       email: '',
       password: '',
     },
     mode: 'onChange',
-    resolver: zodResolver(logInSchema),
+    resolver: zodResolver(registerSchema),
   });
+
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+
+  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
 
   const handleShowPassword = () => {
     setShowPassword(!showPassword);
   };
 
-  const {usersList} = useGetUsersList();
-  console.log('usersList', usersList);
-  const {RPH, RPW} = getWidthHeightStuff();
+  const {mutateAsync} = useMutation({
+    mutationKey: ['register'],
+    mutationFn: registerUser,
+  });
 
-  const handleLogin: SubmitHandler<LogInSchemaType> = value => {
-    console.log(value);
-    // usersList!.map(user => {
-    //   if (user.email === value.email && user.password === value.password) {
-    //     user.isLoggedInBefore = true;
-    //     storage.set('currentUser', JSON.stringify(user));
-    //     navigation.navigate('HomeScreen', {
-    //       screen: 'Home',
-    //     });
-    //     return;
-    //   } else {
-    //     setIsModalVisible(true);
-    //   }
-    // });
-    for (let i = 0; i < usersList!.length; i++) {
-      if (
-        usersList![i].email === value.email &&
-        usersList![i].password === value.password
-      ) {
-        usersList![i].isLoggedInBefore = true;
-        storage.set('currentUser', JSON.stringify(usersList![i]));
-        navigation.navigate('HomeScreen', {
-          screen: 'Home',
-        });
-        break;
-      }
-
-      if (i === usersList!.length - 1) {
+  const handleRegister: SubmitHandler<RegisterSchemaType> = async data => {
+    usersList?.map(user => {
+      if (user.email === data.email) {
         setIsModalVisible(true);
+        return;
       }
+    });
+    if (isModalVisible) {
+      return;
     }
+
+    const newUser: User = {
+      email: data.email,
+      password: data.password,
+      isLoggedInBefore: false,
+      id: usersList!.length + 1,
+      favs: [],
+      watchlist: [],
+      name: data.email.split('@')[0],
+    };
+    await mutateAsync(newUser);
   };
 
   return (
@@ -114,7 +110,7 @@ const LogInScreen: FC<LogInScreenProps> = () => {
             fontWeight: 'bold',
             textAlign: 'center',
           }}>
-          LOG IN
+          REGISTER
         </Text>
         <Modal
           isVisible={isModalVisible}
@@ -161,7 +157,7 @@ const LogInScreen: FC<LogInScreenProps> = () => {
                 fontWeight: 'bold',
                 textAlign: 'center',
               }}>
-              Wrong Credentials
+              This email is already registered
             </Text>
             <TouchableOpacity
               onPress={() => setIsModalVisible(false)}
@@ -202,7 +198,7 @@ const LogInScreen: FC<LogInScreenProps> = () => {
                   borderRadius: 10,
                   padding: 10,
                 }}
-                placeholder={'Email or Username'}
+                placeholder={'Enter Your Email'}
                 placeholderTextColor={errors.email ? '#FF0000' : '#8899AA'}
                 cursorColor={'#8899AA'}
                 selectionColor={'#8899AA'}
@@ -245,7 +241,7 @@ const LogInScreen: FC<LogInScreenProps> = () => {
                   style={{
                     color: '#8899AA',
                   }}
-                  placeholder={'Password'}
+                  placeholder={'Enter Your Password'}
                   placeholderTextColor={errors.password ? '#FF0000' : '#8899AA'}
                   onChangeText={onChange}
                   onBlur={onBlur}
@@ -266,7 +262,7 @@ const LogInScreen: FC<LogInScreenProps> = () => {
                   style={{
                     color: '#FF0000',
                   }}>
-                  Please enter a valid password
+                  {errors.password.message}
                 </Text>
               )}
             </>
@@ -276,6 +272,9 @@ const LogInScreen: FC<LogInScreenProps> = () => {
         <TouchableOpacity
           style={{
             marginTop: 10,
+          }}
+          onPress={() => {
+            navigation.navigate('LoginScreen');
           }}>
           <Text
             style={{
@@ -284,7 +283,7 @@ const LogInScreen: FC<LogInScreenProps> = () => {
               fontWeight: 'bold',
               textAlign: 'right',
             }}>
-            Forgot Password?
+            Have an account? Log In
           </Text>
         </TouchableOpacity>
 
@@ -303,17 +302,17 @@ const LogInScreen: FC<LogInScreenProps> = () => {
               justifyContent: 'center',
               alignItems: 'center',
             }}
-            onPress={handleSubmit(handleLogin)}>
+            onPress={handleSubmit(handleRegister)}>
             <Text
               style={{
                 color: '#1B2126',
                 fontSize: 15,
                 fontWeight: 'bold',
               }}>
-              Log In
+              Register
             </Text>
           </TouchableOpacity>
-          <TouchableHighlight
+          {/* <TouchableHighlight
             underlayColor={'#8899AA'}
             activeOpacity={0.6}
             onPress={() => {
@@ -340,11 +339,11 @@ const LogInScreen: FC<LogInScreenProps> = () => {
               }}>
               Register
             </Text>
-          </TouchableHighlight>
+          </TouchableHighlight> */}
         </View>
       </View>
     </View>
   );
 };
 
-export default LogInScreen;
+export default RegisterScreen;

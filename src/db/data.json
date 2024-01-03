@@ -14,7 +14,9 @@
         12477,
         637,
         385687,
-        891699
+        891699,
+        14062,
+        792307
       ],
       "password": "123456",
       "watchlist": [
@@ -22,7 +24,27 @@
         787699,
         14062
       ],
-      "isLoggedInBefore": true
+      "isLoggedInBefore": false
+    },
+    {
+      "email": "mgmg@email.com",
+      "password": "mglay8834",
+      "isLoggedInBefore": true,
+      "id": 2,
+      "favs": [
+        238,
+        240,
+        129,
+        155,
+        680,
+        37799
+      ],
+      "watchlist": [
+        1029575,
+        496243,
+        372058
+      ],
+      "name": "mgmg"
     }
   ]
 }

@@ -74,7 +74,11 @@ export const getUserFavMoviesList = async ({
 
 export const getUserWatchList = async ({queryKey}: QueryFunctionContext) => {
   try {
-    const [_key, watchList] = queryKey as [string, number[]];
+    const [_key, userId] = queryKey;
+    const user: AxiosResponse<User> = await usersAxiosInstance.get(
+      `/${userId}`,
+    );
+    const watchList: number[] = user.data.watchlist;
     const result: Movie[] = [];
     const fetchWatchList = async () => {
       for (const movieId of watchList) {

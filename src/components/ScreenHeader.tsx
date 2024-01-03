@@ -16,6 +16,8 @@ import {useMutation} from '@tanstack/react-query';
 import {addToFav, addToWatchList} from '@/api/usersApi';
 import currentUser from '@/utils/getCurrentUser';
 import queryClient from '@/libs/reactquery/queryClient';
+import useGetUserFavMovies from '@/hooks/useGetUserFavMovies';
+import useGetUserWatchList from '@/hooks/useGetUserWatchList';
 
 const ScreenHeader: FC<AnimationProps> = ({sv, movie, onBackNav}) => {
   const inset = useSafeAreaInsets();
@@ -63,24 +65,8 @@ const ScreenHeader: FC<AnimationProps> = ({sv, movie, onBackNav}) => {
 
   // const {addToFav} = useAddToFav();
 
-  const addToWatchListMutation = useMutation({
-    mutationFn: addToWatchList,
-    mutationKey: ['add-to-watch-list'],
-  });
-
-  const {mutateAsync} = useMutation({
-    mutationKey: ['add-to-fav'],
-    mutationFn: addToFav,
-    onSuccess: () => {},
-  });
-
-  const handleAddToFav = async (movieId: number) => {
-    await mutateAsync(movieId);
-  };
-
-  const handleAddToWatchList = async (movieId: number) => {
-    await addToWatchListMutation.mutateAsync(movieId);
-  };
+  const {handleAddToFav} = useGetUserFavMovies();
+  const {handleAddToWatchList} = useGetUserWatchList();
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);

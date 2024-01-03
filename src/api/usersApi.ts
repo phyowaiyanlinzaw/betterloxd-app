@@ -81,3 +81,26 @@ export const getUser = async ({queryKey}: QueryFunctionContext) => {
     console.log(err);
   }
 };
+
+export const getCurrentUser = async () => {
+  try {
+    const response: AxiosResponse<User> = await usersAxiosInstance.get(
+      `/${currentUser.id}`,
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const registerUser = async (user: User) => {
+  try {
+    const response: AxiosResponse<User> = await usersAxiosInstance.post(
+      '',
+      user,
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err);
+  }
+};

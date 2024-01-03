@@ -1,4 +1,4 @@
-import {View, Text, ScrollView} from 'react-native';
+import {View, Text, ScrollView, Pressable} from 'react-native';
 import React, {FC, useEffect, useMemo} from 'react';
 import {HomeDrawerProps} from '@/types/navigationType';
 import {storage} from '@/db/storage';
@@ -8,6 +8,9 @@ import useGetUserFavMovies from '@/hooks/useGetUserFavMovies';
 import HorizontalList from '@/components/HorizontalList';
 import useGetUserWatchList from '@/hooks/useGetUserWatchList';
 import {useNavigation} from '@react-navigation/native';
+import {useQuery} from '@tanstack/react-query';
+import {getCurrentUser} from '@/api/usersApi';
+import {RefreshIcon} from '@/assets/icons';
 
 type Props = HomeDrawerProps<'Profile'>;
 type Navigation = Props['navigation'];
@@ -17,7 +20,11 @@ const ProfileScreen: FC<Props> = () => {
   const {userFavMovies, refetchFavs} = useGetUserFavMovies();
   const {userWatchList} = useGetUserWatchList();
 
-  refetchFavs();
+  useEffect(() => {
+    setTimeout(() => {
+      refetchFavs();
+    }, 500);
+  }, [userFavMovies]);
 
   const favMoviesData = useMemo(() => {
     if (!userFavMovies) {
@@ -38,6 +45,11 @@ const ProfileScreen: FC<Props> = () => {
       imagePath: movie.poster_path,
     }));
   }, [userWatchList]);
+
+  const {data} = useQuery({
+    queryKey: ['currentUser'],
+    queryFn: getCurrentUser,
+  });
 
   return (
     <ScrollView
@@ -79,7 +91,7 @@ const ProfileScreen: FC<Props> = () => {
             fontWeight: 'bold',
             textAlign: 'center',
           }}>
-          {currentUser.name}
+          {data?.name}
         </Text>
         <Text
           style={{
@@ -87,7 +99,7 @@ const ProfileScreen: FC<Props> = () => {
             fontSize: 12,
             textAlign: 'center',
           }}>
-          {currentUser.email}
+          {data?.email}
         </Text>
       </View>
       <View
@@ -95,15 +107,24 @@ const ProfileScreen: FC<Props> = () => {
           paddingHorizontal: 5,
           borderRadius: 10,
         }}>
-        <Text
+        <Pressable
+          onPress={() => {
+            refetchFavs();
+          }}
           style={{
-            color: '#8899AA',
-            fontSize: 20,
-            fontWeight: 'bold',
-            padding: 10,
+            flexDirection: 'row',
+            alignItems: 'center',
           }}>
-          Favorite Movies
-        </Text>
+          <Text
+            style={{
+              color: '#8899AA',
+              fontSize: 20,
+              fontWeight: 'bold',
+              padding: 10,
+            }}>
+            Favorite Movies
+          </Text>
+        </Pressable>
         <HorizontalList
           data={favMoviesData}
           onPressItem={id => {

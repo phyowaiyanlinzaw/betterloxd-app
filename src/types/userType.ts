@@ -4,7 +4,6 @@ export type User = {
   email: string;
   favs: number[];
   password: string;
-  watched: number[];
   watchlist: number[];
   isLoggedInBefore: boolean;
 };
