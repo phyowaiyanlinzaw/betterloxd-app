@@ -11,11 +11,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import tailwind from 'twrnc';
 import Modal from 'react-native-modal';
 import {AddIcon, HeartIcon} from '@/assets/icons';
-// import useAddToFav from '@/hooks/useAddToFav';
-import {useMutation} from '@tanstack/react-query';
-import {addToFav, addToWatchList} from '@/api/usersApi';
 import currentUser from '@/utils/getCurrentUser';
-import queryClient from '@/libs/reactquery/queryClient';
 import useGetUserFavMovies from '@/hooks/useGetUserFavMovies';
 import useGetUserWatchList from '@/hooks/useGetUserWatchList';
 

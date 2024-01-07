@@ -1,16 +1,12 @@
 import {View, Text, ScrollView, Pressable} from 'react-native';
 import React, {FC, useEffect, useMemo} from 'react';
 import {HomeDrawerProps} from '@/types/navigationType';
-import {storage} from '@/db/storage';
-import {User} from '@/types/userType';
-import currentUser from '@/utils/getCurrentUser';
 import useGetUserFavMovies from '@/hooks/useGetUserFavMovies';
 import HorizontalList from '@/components/HorizontalList';
 import useGetUserWatchList from '@/hooks/useGetUserWatchList';
 import {useNavigation} from '@react-navigation/native';
-import {useQuery} from '@tanstack/react-query';
-import {getCurrentUser} from '@/api/usersApi';
-import {RefreshIcon} from '@/assets/icons';
+import {useAppDispatch, useAppSelector} from '@/redux/hook/hook';
+import {getUser} from '@/utils/getCurrentUser';
 
 type Props = HomeDrawerProps<'Profile'>;
 type Navigation = Props['navigation'];
@@ -46,12 +42,18 @@ const ProfileScreen: FC<Props> = () => {
     }));
   }, [userWatchList]);
 
-  const {data} = useQuery({
-    queryKey: ['currentUser'],
-    queryFn: getCurrentUser,
-  });
+  const dispatch = useAppDispatch();
+  const currentUser = useAppSelector(state => state.user.user);
 
-  console.log(data);
+  const cu = async () => {
+    return await getUser();
+  };
+
+  useEffect(() => {
+    cu().then(user => {
+      console.log('Log In Screen current user : ', user);
+    });
+  }, []);
 
   return (
     <ScrollView
@@ -79,7 +81,7 @@ const ProfileScreen: FC<Props> = () => {
             fontSize: 50,
             color: '#15181D',
           }}>
-          {currentUser.name.split('')[0]}
+          {currentUser?.name?.charAt(0)}
         </Text>
       </View>
       <View
@@ -93,7 +95,7 @@ const ProfileScreen: FC<Props> = () => {
             fontWeight: 'bold',
             textAlign: 'center',
           }}>
-          {data?.name}
+          {currentUser?.name}
         </Text>
         <Text
           style={{
@@ -101,7 +103,7 @@ const ProfileScreen: FC<Props> = () => {
             fontSize: 12,
             textAlign: 'center',
           }}>
-          {data?.email}
+          {currentUser?.email}
         </Text>
       </View>
       <View

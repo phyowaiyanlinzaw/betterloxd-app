@@ -12,10 +12,22 @@ import ProfileScreen from '@/screens/ProfileScreen';
 import currentUser from '@/utils/getCurrentUser';
 import {storage} from '@/db/storage';
 import {MMKV} from 'react-native-mmkv';
+import {useAppDispatch, useAppSelector} from '@/redux/hook/hook';
+import {logout} from '@/redux/features/userSlice';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Drawer = createDrawerNavigator<HomeDrawerParamsList>();
 
 const AppDrawerNavigator = () => {
+  const currentUser = useAppSelector(state => state.user.user);
+  const dispatch = useAppDispatch();
+  const deleteUser = async () => {
+    try {
+      await AsyncStorage.removeItem('currentUser');
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
     <Drawer.Navigator
       screenOptions={{
@@ -65,9 +77,9 @@ const AppDrawerNavigator = () => {
                 }}>
                 <Pressable
                   onPress={() => {
-                    storage.delete('currentUser');
-                    console.log('Log out', currentUser);
-                    currentUser.isLoggedInBefore = false;
+                    // currentUser.isLoggedInBefore = false;
+                    dispatch(logout());
+                    deleteUser();
                     navigation.reset({
                       index: 0,
                       routes: [{name: 'LoginScreen'}],

@@ -1,13 +1,10 @@
 import usersAxiosInstance from '@/libs/axios-config/usersAxiosInstance';
 import queryClient from '@/libs/reactquery/queryClient';
+import {useAppSelector} from '@/redux/hook/hook';
 import {User} from '@/types/userType';
 import currentUser from '@/utils/getCurrentUser';
 import {QueryFunctionContext} from '@tanstack/react-query';
 import {AxiosResponse} from 'axios';
-
-type ResponseModel = {
-  jsonStringResponse: string;
-};
 
 export const getUsersList = async () => {
   try {
@@ -18,15 +15,15 @@ export const getUsersList = async () => {
   }
 };
 
-// interface AddToFavParams {
-//   movieId: number;
-//   queryKey: string;
-// }
+interface AddToSmthParams {
+  movieId: number;
+  userId: number;
+}
 
-export const addToFav = async (movieId: number) => {
+export const addToFav = async ({movieId, userId}: AddToSmthParams) => {
   try {
     const userToUpdate: AxiosResponse<User> = await usersAxiosInstance.get(
-      `/${currentUser.id}`,
+      `/${userId}`,
     );
 
     const updatedData = {
@@ -35,7 +32,7 @@ export const addToFav = async (movieId: number) => {
     };
 
     const response: AxiosResponse<User> = await usersAxiosInstance.patch(
-      `/${currentUser.id}`,
+      `/${userId}`,
       updatedData,
     );
 
@@ -47,10 +44,10 @@ export const addToFav = async (movieId: number) => {
   }
 };
 
-export const addToWatchList = async (movieId: number) => {
+export const addToWatchList = async ({userId, movieId}: AddToSmthParams) => {
   try {
     const userToUpdate: AxiosResponse<User> = await usersAxiosInstance.get(
-      `/${currentUser.id}`,
+      `/${userId}`,
     );
 
     const updatedData = {
@@ -82,11 +79,11 @@ export const getUser = async ({queryKey}: QueryFunctionContext) => {
   }
 };
 
-export const getCurrentUser = async () => {
-  console.log('getCurrentUserId', currentUser.id);
+export const getCurrentUser = async ({queryKey}: QueryFunctionContext) => {
   try {
+    const [_key, userId] = queryKey;
     const response: AxiosResponse<User> = await usersAxiosInstance.get(
-      `/${currentUser.id}`,
+      `/${userId}`,
     );
     return response.data;
   } catch (err) {

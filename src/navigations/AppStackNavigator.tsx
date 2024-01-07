@@ -1,31 +1,18 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import HomeScreen from '@/screens/HomeScreen';
 import {RootStackParamsList} from '@/types/navigationType';
 import DetailsScreen from '@/screens/DetailsScreen';
 
 import LogInScreen from '@/screens/LogInScreen';
 import AppDrawerNavigator from './AppDrawerNavigator';
-import {useState} from 'react';
-import {Text, TouchableOpacity} from 'react-native';
-import {storage} from '@/db/storage';
-import {User} from '@/types/userType';
 import RegisterScreen from '@/screens/RegisterScreen';
-import useGetUser from '@/hooks/useGetUser';
-import {current} from '@reduxjs/toolkit';
 import currentUser from '@/utils/getCurrentUser';
-import {useQuery} from '@tanstack/react-query';
-import {getCurrentUser} from '@/api/usersApi';
 import TestScreen from '@/screens/TestScreen';
+import {useAppSelector} from '@/redux/hook/hook';
 
 const Stack = createNativeStackNavigator<RootStackParamsList>();
 
 const AppStackNavigator = () => {
-  const jsonUser = storage.getString('currentUser');
-
-  const {data} = useQuery({
-    queryKey: ['currentUser'],
-    queryFn: getCurrentUser,
-  });
+  const currentUser = useAppSelector(state => state.user.user);
   return (
     <Stack.Navigator
       screenOptions={{
@@ -34,8 +21,8 @@ const AppStackNavigator = () => {
         },
       }}
       initialRouteName={
-        // data?.isLoggedInBefore ? 'HomeScreen' : 'LoginScreen'
-        'TestScreen'
+        currentUser.isLoggedInBefore ? 'HomeScreen' : 'LoginScreen'
+        // 'TestScreen'
       }>
       <Stack.Screen
         name={'HomeScreen'}

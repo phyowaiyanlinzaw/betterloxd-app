@@ -15,15 +15,31 @@ import {zodResolver} from '@hookform/resolvers/zod';
 import {getWidthHeightStuff} from '@/utils/getWidthHeightStuff';
 import {useNavigation} from '@react-navigation/native';
 import {WarningIcon} from '@/assets/icons';
-import {storage} from '@/db/storage';
-import {User} from '@/types/userType';
-import {useMMKV, useMMKVObject} from 'react-native-mmkv';
+import {useAppDispatch, useAppSelector} from '@/redux/hook/hook';
+import {setUser} from '@/redux/features/userSlice';
+import currentUser, {getUser} from '@/utils/getCurrentUser';
+import {getCurrentUser} from '@/api/usersApi';
 
 type LogInScreenProps = RootStackProps<'LoginScreen'>;
 type Navigation = LogInScreenProps['navigation'];
 
 const LogInScreen: FC<LogInScreenProps> = () => {
   const navigation = useNavigation<Navigation>();
+
+  const dispatch = useAppDispatch();
+  const testUser = useAppSelector(state => state.user);
+
+  console.log('Log In Screen test user : ', testUser);
+
+  const cu = async () => {
+    return await getUser();
+  };
+
+  useEffect(() => {
+    cu().then(user => {
+      console.log('Log In Screen current user : ', user);
+    });
+  }, []);
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [isRegisterBtnPressed, setIsRegisterBtnPressed] =
@@ -34,8 +50,6 @@ const LogInScreen: FC<LogInScreenProps> = () => {
     email: z.string().email() || z.string().min(8),
     password: z.string(),
   });
-
-  const [user, setUser] = useMMKVObject<User>('currentUser');
 
   type LogInSchemaType = z.infer<typeof logInSchema>;
 
@@ -64,10 +78,7 @@ const LogInScreen: FC<LogInScreenProps> = () => {
   const handleLogin: SubmitHandler<LogInSchemaType> = value => {
     for (let user of usersList!) {
       if (user.email === value.email && user.password === value.password) {
-        storage.delete('currentUser');
-        console.log('user found', user);
-        user.isLoggedInBefore = true;
-        storage.set('currentUser', JSON.stringify(user));
+        dispatch(setUser(user));
         navigation.navigate('HomeScreen', {
           screen: 'Home',
         });

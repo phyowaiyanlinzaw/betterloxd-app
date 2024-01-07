@@ -1,12 +1,13 @@
 import {View, Text} from 'react-native';
 import React from 'react';
-import currentUser from '@/utils/getCurrentUser';
 import {getUserFavMoviesList, getUserWatchList} from '@/api/moviesApi';
 import {useMutation, useQuery} from '@tanstack/react-query';
 import {addToWatchList} from '@/api/usersApi';
 import queryClient from '@/libs/reactquery/queryClient';
+import {useAppSelector} from '@/redux/hook/hook';
 
 const useGetUserWatchList = () => {
+  const currentUser = useAppSelector(state => state.user.user);
   const {data} = useQuery({
     queryKey: ['user-watch-list', currentUser.id],
     queryFn: getUserWatchList,
@@ -23,7 +24,10 @@ const useGetUserWatchList = () => {
   });
 
   const handleAddToWatchList = async (movieId: number) => {
-    await addToWatchListMutation.mutateAsync(movieId);
+    await addToWatchListMutation.mutateAsync({
+      movieId,
+      userId: currentUser.id,
+    });
   };
   return {
     userWatchList: data,

@@ -8,6 +8,8 @@ import useGetTopRatedMovies from '@/hooks/useGetTopRatedMovies';
 import {useNavigation} from '@react-navigation/native';
 import useGetUpcomingMovies from '@/hooks/useGetUpcomingMovies';
 import {storage} from '@/db/storage';
+import {useAppSelector} from '@/redux/hook/hook';
+import currentUser from '@/utils/getCurrentUser';
 
 type HomeScreenProps = HomeDrawerProps<'Home'>;
 type Navigation = HomeScreenProps['navigation'];
@@ -16,6 +18,10 @@ const HomeScreen: FC<HomeScreenProps> = () => {
   const {popularMoviesData, isLoading} = useGetPopularMovies();
   const {topRatedMoviesData} = useGetTopRatedMovies();
   const {upcomingMoviesData} = useGetUpcomingMovies();
+
+  const currentUserStore = useAppSelector(state => state.user);
+
+  console.log('currentUserStore Homescreen', currentUserStore);
 
   const popularMovies = useMemo(() => {
     if (!popularMoviesData) {
@@ -50,8 +56,8 @@ const HomeScreen: FC<HomeScreenProps> = () => {
   }, [upcomingMoviesData]);
 
   const navigation = useNavigation<Navigation>();
-  const jsonUser = storage.getString('currentUser');
-  const currentUser = JSON.parse(jsonUser!);
+  // const jsonUser = storage.getString('currentUser');
+  // const currentUser = JSON.parse(jsonUser!);
 
   return (
     <ScrollView

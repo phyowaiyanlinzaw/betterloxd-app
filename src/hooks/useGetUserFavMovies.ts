@@ -1,14 +1,11 @@
-import {View, Text} from 'react-native';
-import React from 'react';
 import {useMutation, useQuery} from '@tanstack/react-query';
-import {getMovieDetails, getUserFavMoviesList} from '@/api/moviesApi';
-import currentUser from '@/utils/getCurrentUser';
-import {Movie} from '@/types/movieType';
-import useGetUser from './useGetUser';
+import {getUserFavMoviesList} from '@/api/moviesApi';
 import {addToFav} from '@/api/usersApi';
 import queryClient from '@/libs/reactquery/queryClient';
+import {useAppSelector} from '@/redux/hook/hook';
 
 const useGetUserFavMovies = () => {
+  const currentUser = useAppSelector(state => state.user.user);
   const {data, refetch} = useQuery({
     queryKey: ['user-fav-movies', currentUser.id],
     queryFn: getUserFavMoviesList,
@@ -25,7 +22,10 @@ const useGetUserFavMovies = () => {
   });
 
   const handleAddToFav = async (movieId: number) => {
-    await mutateAsync(movieId);
+    await mutateAsync({
+      movieId,
+      userId: currentUser.id,
+    });
   };
 
   return {

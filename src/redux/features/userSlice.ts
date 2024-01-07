@@ -1,15 +1,37 @@
 import {User} from '@/types/userType';
 import {PayloadAction, createSlice} from '@reduxjs/toolkit';
 import {RootState} from '../store';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {storage} from '@/db/storage';
 
-const initialUser: User = {
-  id: 0,
-  name: '',
-  email: '',
-  password: '',
-  favs: [],
-  watchlist: [],
-  isLoggedInBefore: false,
+const initialUser: {user: User} = {
+  user: {
+    id: 0,
+    name: '',
+    email: '',
+    password: '',
+    favs: [],
+    watchlist: [],
+    isLoggedInBefore: false,
+  },
+};
+
+const storeUser = async (user: User) => {
+  user.isLoggedInBefore = true;
+  console.log('storeUser', user);
+  try {
+    await AsyncStorage.setItem('currentUser', JSON.stringify(user));
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const resetUser = async () => {
+  try {
+    await AsyncStorage.removeItem('currentUser');
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 const userSlice = createSlice({
@@ -17,16 +39,25 @@ const userSlice = createSlice({
   initialState: initialUser,
   reducers: {
     setUser: (state, action: PayloadAction<User>) => {
-      state = action.payload;
+      state.user = action.payload;
+      storeUser(action.payload);
     },
     logout: state => {
-      state = initialUser;
+      state.user = {
+        id: 0,
+        name: '',
+        email: '',
+        password: '',
+        favs: [],
+        watchlist: [],
+        isLoggedInBefore: false,
+      };
     },
   },
 });
 
 export const {setUser, logout} = userSlice.actions;
 
-export const selectUser = (state: RootState) => state.userSlice;
+export const selectUser = (state: RootState) => state.user;
 
 export default userSlice.reducer;
