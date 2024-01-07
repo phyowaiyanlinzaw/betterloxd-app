@@ -1,4 +1,11 @@
-import {View, Text, FlatList, TouchableOpacity, Image} from 'react-native';
+import {
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  Image,
+  ActivityIndicator,
+} from 'react-native';
 import React, {FC} from 'react';
 
 type ListItem = {
@@ -11,7 +18,16 @@ type ListItem = {
 const HorizontalList: FC<{
   data: ListItem[];
   onPressItem?: (id: number) => void;
-}> = ({data, onPressItem}) => {
+  onEndReachFetchFunc?: () => void;
+  hasNextPage?: boolean;
+  isFetchingNextPage?: boolean;
+}> = ({
+  data,
+  onPressItem,
+  hasNextPage,
+  isFetchingNextPage,
+  onEndReachFetchFunc,
+}) => {
   return (
     <View
       style={{
@@ -19,6 +35,30 @@ const HorizontalList: FC<{
       }}>
       <FlatList
         horizontal
+        onEndReached={() =>
+          hasNextPage && onEndReachFetchFunc && onEndReachFetchFunc()
+        }
+        ListFooterComponent={() =>
+          isFetchingNextPage && (
+            <View
+              style={{
+                width: 100,
+                height: 150,
+                margin: 5,
+                borderRadius: 10,
+                overflow: 'hidden',
+              }}>
+              <ActivityIndicator
+                size="large"
+                color="#8899AA"
+                style={{
+                  width: '100%',
+                  height: '100%',
+                }}
+              />
+            </View>
+          )
+        }
         data={data}
         renderItem={({item}) => (
           <View>

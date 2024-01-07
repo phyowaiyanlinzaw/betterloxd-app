@@ -19,14 +19,14 @@ export const getPopularMovies = async () => {
   }
 };
 
-export const getTopRatedMovies = async () => {
+export const getTopRatedMovies = async (page: number) => {
   try {
     const response: AxiosResponse<{
       page: number;
       results: Movie[];
       total_pages: number;
       total_results: number;
-    }> = await tmdbAxiosInstance.get('movie/top_rated');
+    }> = await tmdbAxiosInstance.get('movie/top_rated', {params: {page}});
     return response.data;
   } catch (error) {
     console.log(error);

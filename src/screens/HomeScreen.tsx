@@ -16,7 +16,18 @@ type Navigation = HomeScreenProps['navigation'];
 
 const HomeScreen: FC<HomeScreenProps> = () => {
   const {popularMoviesData, isLoading} = useGetPopularMovies();
-  const {topRatedMoviesData} = useGetTopRatedMovies();
+  const {topRatedMoviesData, isFetchingNextPage, fetchNextPage, hasNextPage} =
+    useGetTopRatedMovies();
+
+  console.log(
+    fetchNextPage,
+    'fetchNextPage',
+    isFetchingNextPage,
+    'isFetchingNextPage',
+    hasNextPage,
+    'hasNextPage',
+  );
+
   const {upcomingMoviesData} = useGetUpcomingMovies();
 
   const currentUserStore = useAppSelector(state => state.user);
@@ -39,7 +50,7 @@ const HomeScreen: FC<HomeScreenProps> = () => {
     if (!topRatedMoviesData) {
       return [];
     }
-    return topRatedMoviesData.results.map(movie => ({
+    return topRatedMoviesData.map(movie => ({
       id: movie.id,
       imagePath: movie.poster_path,
     }));
@@ -114,6 +125,9 @@ const HomeScreen: FC<HomeScreenProps> = () => {
                 movieId: id,
               });
             }}
+            onEndReachFetchFunc={fetchNextPage}
+            isFetchingNextPage={isFetchingNextPage}
+            hasNextPage={hasNextPage}
           />
         </View>
         <View
