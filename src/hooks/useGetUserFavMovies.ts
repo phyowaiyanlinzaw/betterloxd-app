@@ -1,6 +1,6 @@
 import {useMutation, useQuery} from '@tanstack/react-query';
 import {getUserFavMoviesList} from '@/api/moviesApi';
-import {addToFav} from '@/api/usersApi';
+import {addToFav, removeFromFav} from '@/api/usersApi';
 import queryClient from '@/libs/reactquery/queryClient';
 import {useAppSelector} from '@/redux/hook/hook';
 
@@ -13,7 +13,7 @@ const useGetUserFavMovies = () => {
 
   const {mutateAsync} = useMutation({
     mutationKey: ['add-to-fav'],
-    mutationFn: addToFav,
+    mutationFn: removeFromFav,
     onSuccess: () => {
       return queryClient.invalidateQueries({
         queryKey: ['user-fav-movies', currentUser.id],
@@ -28,10 +28,28 @@ const useGetUserFavMovies = () => {
     });
   };
 
+  const removeFromFavMutate = useMutation({
+    mutationKey: ['remove-from-fav'],
+    mutationFn: addToFav,
+    onSuccess: () => {
+      return queryClient.invalidateQueries({
+        queryKey: ['user-fav-movies', currentUser.id],
+      });
+    },
+  });
+
+  const handleRemoveFromFav = async (movieId: number) => {
+    await removeFromFavMutate.mutateAsync({
+      movieId,
+      userId: currentUser.id,
+    });
+  };
+
   return {
     userFavMovies: data,
     refetchFavs: refetch,
     handleAddToFav,
+    handleRemoveFromFav,
   };
 };
 

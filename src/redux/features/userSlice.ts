@@ -2,7 +2,6 @@ import {User} from '@/types/userType';
 import {PayloadAction, createSlice} from '@reduxjs/toolkit';
 import {RootState} from '../store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {storage} from '@/db/storage';
 
 const initialUser: {user: User} = {
   user: {
@@ -18,7 +17,7 @@ const initialUser: {user: User} = {
 
 const storeUser = async (user: User) => {
   user.isLoggedInBefore = true;
-  console.log('storeUser', user);
+  // console.log('storeUser', user);
   try {
     await AsyncStorage.setItem('currentUser', JSON.stringify(user));
   } catch (err) {

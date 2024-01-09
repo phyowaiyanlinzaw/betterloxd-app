@@ -15,10 +15,9 @@ import {zodResolver} from '@hookform/resolvers/zod';
 import {getWidthHeightStuff} from '@/utils/getWidthHeightStuff';
 import {useNavigation} from '@react-navigation/native';
 import {WarningIcon} from '@/assets/icons';
-import {useAppDispatch, useAppSelector} from '@/redux/hook/hook';
+import {useAppDispatch} from '@/redux/hook/hook';
 import {setUser} from '@/redux/features/userSlice';
-import currentUser, {getUser} from '@/utils/getCurrentUser';
-import {getCurrentUser} from '@/api/usersApi';
+import {getUser} from '@/utils/getCurrentUser';
 
 type LogInScreenProps = RootStackProps<'LoginScreen'>;
 type Navigation = LogInScreenProps['navigation'];
@@ -27,7 +26,6 @@ const LogInScreen: FC<LogInScreenProps> = () => {
   const navigation = useNavigation<Navigation>();
 
   const dispatch = useAppDispatch();
-  const testUser = useAppSelector(state => state.user);
 
   // console.log('Log In Screen test user : ', testUser);
 
@@ -36,7 +34,7 @@ const LogInScreen: FC<LogInScreenProps> = () => {
   };
 
   useEffect(() => {
-    cu().then(user => {
+    cu().then(() => {
       // console.log('Log In Screen current user : ', user);
     });
   }, []);
@@ -56,9 +54,7 @@ const LogInScreen: FC<LogInScreenProps> = () => {
   const {
     control,
     handleSubmit,
-    reset,
-    setValue,
-    formState: {errors, isValid, isDirty},
+    formState: {errors},
   } = useForm<LogInSchemaType>({
     defaultValues: {
       email: '',
@@ -183,7 +179,7 @@ const LogInScreen: FC<LogInScreenProps> = () => {
         <Controller
           control={control}
           name="email"
-          render={({field: {onChange, onBlur, value}, formState: {errors}}) => (
+          render={({field: {onChange, value}, formState: {errors}}) => (
             <>
               <TextInput
                 autoCapitalize="none"

@@ -1,6 +1,6 @@
 import {AnimationProps} from '@/types/AnimationPropsType';
 import {getDetailsScreenConst} from '@/utils/getDetailsScreenConst';
-import React, {FC, useState} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {Text, View} from 'react-native';
 import Animated, {
   Extrapolation,
@@ -10,14 +10,13 @@ import Animated, {
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import tailwind from 'twrnc';
 import Modal from 'react-native-modal';
-import {AddIcon, HeartIcon} from '@/assets/icons';
-import currentUser from '@/utils/getCurrentUser';
 import useGetUserFavMovies from '@/hooks/useGetUserFavMovies';
 import useGetUserWatchList from '@/hooks/useGetUserWatchList';
-import {useAppSelector} from '@/redux/hook/hook';
+import {useAppDispatch, useAppSelector} from '@/redux/hook/hook';
 import {getWidthHeightStuff} from '@/utils/getWidthHeightStuff';
-import Toast from 'react-native-toast-message';
 import {useToast} from 'react-native-toast-notifications';
+import {getCurrentUser} from '@/api/usersApi';
+import {setUser} from '@/redux/features/userSlice';
 
 const ScreenHeader: FC<AnimationProps> = ({sv, movie, onBackNav}) => {
   const inset = useSafeAreaInsets();
@@ -63,9 +62,21 @@ const ScreenHeader: FC<AnimationProps> = ({sv, movie, onBackNav}) => {
   const [isModalVisible, setModalVisible] = useState(false);
 
   const currentUser = useAppSelector(state => state.user.user);
+  const dispatch = useAppDispatch();
 
-  const {handleAddToFav} = useGetUserFavMovies();
-  const {handleAddToWatchList} = useGetUserWatchList();
+  useEffect(() => {
+    const getUserData = async () => {
+      const user = await getCurrentUser();
+      return user;
+    };
+    getUserData().then(user => {
+      dispatch(setUser(user!));
+    });
+  }, []);
+
+  const {handleAddToFav, handleRemoveFromFav} = useGetUserFavMovies();
+  const {handleAddToWatchList, handleRemoveFromWatchList} =
+    useGetUserWatchList();
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
@@ -165,7 +176,9 @@ const ScreenHeader: FC<AnimationProps> = ({sv, movie, onBackNav}) => {
               onPress={
                 currentUser
                   ? () => {
-                      handleAddToWatchList(movie?.id!);
+                      isAlreadyInUserFav
+                        ? handleRemoveFromWatchList(movie?.id!)
+                        : handleAddToWatchList(movie?.id!);
                       toggleModal();
                       showToast();
                     }
@@ -200,6 +213,19 @@ const ScreenHeader: FC<AnimationProps> = ({sv, movie, onBackNav}) => {
               backgroundColor: isAlreadyInUserFav ? '#8899AA' : 'transparent',
             }}>
             <Text
+              onPress={
+                currentUser
+                  ? () => {
+                      isAlreadyInUserFav
+                        ? handleRemoveFromFav(movie?.id!)
+                        : handleAddToFav(movie?.id!);
+                      toggleModal();
+                      showToast();
+                    }
+                  : () => {
+                      toggleModal();
+                    }
+              }
               style={{
                 color: isAlreadyInUserFav ? '#15181D' : '#8899AA',
                 fontSize: 40,

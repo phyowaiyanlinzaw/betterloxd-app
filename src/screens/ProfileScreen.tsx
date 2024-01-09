@@ -8,9 +8,7 @@ import {useNavigation} from '@react-navigation/native';
 import {useAppDispatch, useAppSelector} from '@/redux/hook/hook';
 import {getUser} from '@/utils/getCurrentUser';
 import {setUser} from '@/redux/features/userSlice';
-import {getCurrentUser} from '@/api/usersApi';
-import {User} from '@/types/userType';
-import {get} from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
+import {getWidthHeightStuff} from '@/utils/getWidthHeightStuff';
 
 type Props = HomeDrawerProps<'Profile'>;
 type Navigation = Props['navigation'];
@@ -19,6 +17,14 @@ const ProfileScreen: FC<Props> = () => {
   const navigation = useNavigation<Navigation>();
   const {userFavMovies, refetchFavs} = useGetUserFavMovies();
   const {userWatchList} = useGetUserWatchList();
+
+  useEffect(() => {
+    getCurrentUser().then(user => {
+      dispatch(setUser(user));
+    });
+  }, []);
+
+  const currentUserFromStore = useAppSelector(state => state.user.user);
 
   useEffect(() => {
     setTimeout(() => {
@@ -48,18 +54,12 @@ const ProfileScreen: FC<Props> = () => {
 
   const dispatch = useAppDispatch();
 
-  const currentUserFromStore = useAppSelector(state => state.user.user);
-
   const getCurrentUser = async () => {
     const user = await getUser();
     return user;
   };
 
-  useEffect(() => {
-    getCurrentUser().then(user => {
-      dispatch(setUser(user));
-    });
-  }, [currentUserFromStore.favs, currentUserFromStore.watchlist]);
+  const {RPH, RPW} = getWidthHeightStuff();
 
   return (
     <ScrollView
@@ -67,7 +67,7 @@ const ProfileScreen: FC<Props> = () => {
         flex: 1,
         backgroundColor: '#15181D',
         paddingHorizontal: 10,
-        paddingTop: 10,
+        paddingTop: RPH(5),
       }}>
       <View
         style={{

@@ -2,7 +2,7 @@ import {View, Text} from 'react-native';
 import React from 'react';
 import {getUserFavMoviesList, getUserWatchList} from '@/api/moviesApi';
 import {useMutation, useQuery} from '@tanstack/react-query';
-import {addToWatchList} from '@/api/usersApi';
+import {addToWatchList, removeFromWatchList} from '@/api/usersApi';
 import queryClient from '@/libs/reactquery/queryClient';
 import {useAppSelector} from '@/redux/hook/hook';
 
@@ -29,9 +29,28 @@ const useGetUserWatchList = () => {
       userId: currentUser.id,
     });
   };
+
+  const removeFromWatchListMutation = useMutation({
+    mutationFn: removeFromWatchList,
+    mutationKey: ['remove-from-watch-list'],
+    onSuccess: () => {
+      return queryClient.invalidateQueries({
+        queryKey: ['user-watch-list', currentUser.id],
+      });
+    },
+  });
+
+  const handleRemoveFromWatchList = async (movieId: number) => {
+    await removeFromWatchListMutation.mutateAsync({
+      movieId,
+      userId: currentUser.id,
+    });
+  };
+
   return {
     userWatchList: data,
     handleAddToWatchList,
+    handleRemoveFromWatchList,
   };
 };
 
