@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import React, {FC} from 'react';
 import FastImage from 'react-native-fast-image';
+import {getWidthHeightStuff} from '@/utils/getWidthHeightStuff';
 
 type ListItem = {
   id: number;
@@ -29,6 +30,7 @@ const HorizontalList: FC<{
   isFetchingNextPage,
   onEndReachFetchFunc,
 }) => {
+  const {RPW, RPH} = getWidthHeightStuff();
   return (
     <View
       style={{
@@ -43,8 +45,8 @@ const HorizontalList: FC<{
           isFetchingNextPage && (
             <View
               style={{
-                width: 100,
-                height: 150,
+                width: RPW(100),
+                height: RPH(150),
                 margin: 5,
                 borderRadius: 10,
                 overflow: 'hidden',
@@ -65,8 +67,8 @@ const HorizontalList: FC<{
           <View>
             <TouchableOpacity
               style={{
-                width: 100,
-                height: 150,
+                width: RPW(27),
+                height: RPH(19),
                 margin: 5,
                 borderRadius: 10,
                 overflow: 'hidden',
