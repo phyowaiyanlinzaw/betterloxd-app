@@ -15,18 +15,18 @@ type HomeScreenProps = HomeDrawerProps<'Home'>;
 type Navigation = HomeScreenProps['navigation'];
 
 const HomeScreen: FC<HomeScreenProps> = () => {
-  const {popularMoviesData, isLoading} = useGetPopularMovies();
-  const {topRatedMoviesData, isFetchingNextPage, fetchNextPage, hasNextPage} =
-    useGetTopRatedMovies();
-
-  console.log(
-    fetchNextPage,
-    'fetchNextPage',
-    isFetchingNextPage,
-    'isFetchingNextPage',
-    hasNextPage,
-    'hasNextPage',
-  );
+  const {
+    popularMoviesData,
+    isFetchingNextPagePopularMovies,
+    fetchNextPagePopularMovies,
+    hasNextPagePopularMovies,
+  } = useGetPopularMovies();
+  const {
+    topRatedMoviesData,
+    isFetchingNextPageTopRatedMovies,
+    fetchNextPageTopRatedMovies,
+    hasNextPageTopRatedMovies,
+  } = useGetTopRatedMovies();
 
   const {upcomingMoviesData} = useGetUpcomingMovies();
 
@@ -38,7 +38,7 @@ const HomeScreen: FC<HomeScreenProps> = () => {
     if (!popularMoviesData) {
       return [];
     }
-    return popularMoviesData.results
+    return popularMoviesData
       .filter(movie => movie.vote_average > 6.5)
       .map(movie => ({
         id: movie.id,
@@ -67,8 +67,6 @@ const HomeScreen: FC<HomeScreenProps> = () => {
   }, [upcomingMoviesData]);
 
   const navigation = useNavigation<Navigation>();
-  // const jsonUser = storage.getString('currentUser');
-  // const currentUser = JSON.parse(jsonUser!);
 
   return (
     <ScrollView
@@ -102,6 +100,9 @@ const HomeScreen: FC<HomeScreenProps> = () => {
                 movieId: id,
               });
             }}
+            onEndReachFetchFunc={fetchNextPagePopularMovies}
+            isFetchingNextPage={isFetchingNextPagePopularMovies}
+            hasNextPage={hasNextPagePopularMovies}
           />
         </View>
         <View
@@ -125,9 +126,9 @@ const HomeScreen: FC<HomeScreenProps> = () => {
                 movieId: id,
               });
             }}
-            onEndReachFetchFunc={fetchNextPage}
-            isFetchingNextPage={isFetchingNextPage}
-            hasNextPage={hasNextPage}
+            onEndReachFetchFunc={fetchNextPageTopRatedMovies}
+            isFetchingNextPage={isFetchingNextPageTopRatedMovies}
+            hasNextPage={hasNextPageTopRatedMovies}
           />
         </View>
         <View

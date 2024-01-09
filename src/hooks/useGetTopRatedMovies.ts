@@ -39,8 +39,8 @@ export default function useGetTopRatedMovies() {
     });
   return {
     topRatedMoviesData: data?.pages.map(page => page.movies).flat(),
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
+    fetchNextPageTopRatedMovies: fetchNextPage,
+    hasNextPageTopRatedMovies: hasNextPage,
+    isFetchingNextPageTopRatedMovies: isFetchingNextPage,
   };
 }
