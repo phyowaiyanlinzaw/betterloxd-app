@@ -2,9 +2,9 @@ import usersAxiosInstance from '@/libs/axios-config/usersAxiosInstance';
 import {useAppSelector} from '@/redux/hook/hook';
 import {User} from '@/types/userType';
 import {QueryFunctionContext} from '@tanstack/react-query';
-import {AxiosResponse} from 'axios';
+import axios, {AxiosResponse} from 'axios';
 
-const currentUser = useAppSelector(state => state.user.user);
+// const currentUser = useAppSelector(state => state.user.user);
 
 export const getUsersList = async () => {
   try {
@@ -86,7 +86,7 @@ export const addToWatchList = async ({userId, movieId}: AddToSmthParams) => {
     };
 
     const response: AxiosResponse<User> = await usersAxiosInstance.patch(
-      `/${currentUser.id}`,
+      `/${userId}`,
       updatedData,
     );
 
@@ -113,7 +113,7 @@ export const removeFromWatchList = async ({
     };
 
     const response: AxiosResponse<User> = await usersAxiosInstance.patch(
-      `/${currentUser.id}`,
+      `/${userId}`,
       updatedData,
     );
 
@@ -135,10 +135,10 @@ export const getUser = async ({queryKey}: QueryFunctionContext) => {
   }
 };
 
-export const getCurrentUser = async () => {
+export const getCurrentUser = async (userId: number) => {
   try {
     const response: AxiosResponse<User> = await usersAxiosInstance.get(
-      `/${currentUser.id}`,
+      `/${userId}`,
     );
     return response.data;
   } catch (err) {

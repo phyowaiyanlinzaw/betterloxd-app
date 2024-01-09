@@ -2,6 +2,7 @@ import {User} from '@/types/userType';
 import {PayloadAction, createSlice} from '@reduxjs/toolkit';
 import {RootState} from '../store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {storage} from '@/db/storage';
 
 const initialUser: {user: User} = {
   user: {
@@ -15,31 +16,13 @@ const initialUser: {user: User} = {
   },
 };
 
-const storeUser = async (user: User) => {
-  user.isLoggedInBefore = true;
-  // console.log('storeUser', user);
-  try {
-    await AsyncStorage.setItem('currentUser', JSON.stringify(user));
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-const resetUser = async () => {
-  try {
-    await AsyncStorage.removeItem('currentUser');
-  } catch (err) {
-    console.log(err);
-  }
-};
-
 const userSlice = createSlice({
   name: 'user',
   initialState: initialUser,
   reducers: {
     setUser: (state, action: PayloadAction<User>) => {
       state.user = action.payload;
-      storeUser(action.payload);
+      storage.set('currentUser', JSON.stringify(action.payload));
     },
     logout: state => {
       state.user = {

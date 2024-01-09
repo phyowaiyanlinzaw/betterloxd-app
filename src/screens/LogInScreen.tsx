@@ -17,7 +17,9 @@ import {useNavigation} from '@react-navigation/native';
 import {WarningIcon} from '@/assets/icons';
 import {useAppDispatch} from '@/redux/hook/hook';
 import {setUser} from '@/redux/features/userSlice';
-import {getUser} from '@/utils/getCurrentUser';
+
+import {User} from '@/types/userType';
+import {storage} from '@/db/storage';
 
 type LogInScreenProps = RootStackProps<'LoginScreen'>;
 type Navigation = LogInScreenProps['navigation'];
@@ -26,18 +28,9 @@ const LogInScreen: FC<LogInScreenProps> = () => {
   const navigation = useNavigation<Navigation>();
 
   const dispatch = useAppDispatch();
+  const usersListData = useGetUsersList();
 
   // console.log('Log In Screen test user : ', testUser);
-
-  const cu = async () => {
-    return await getUser();
-  };
-
-  useEffect(() => {
-    cu().then(() => {
-      // console.log('Log In Screen current user : ', user);
-    });
-  }, []);
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [isRegisterBtnPressed, setIsRegisterBtnPressed] =
@@ -68,23 +61,27 @@ const LogInScreen: FC<LogInScreenProps> = () => {
     setShowPassword(!showPassword);
   };
 
-  const {usersList} = useGetUsersList();
   const {RPH, RPW} = getWidthHeightStuff();
 
   const handleLogin: SubmitHandler<LogInSchemaType> = value => {
-    for (let user of usersList!) {
-      if (user.email === value.email && user.password === value.password) {
+    if (usersListData.usersList) {
+      const user: User | undefined = usersListData.usersList.find(
+        user => user.email === value.email && user.password === value.password,
+      );
+      if (user) {
         dispatch(setUser(user));
         navigation.navigate('HomeScreen', {
           screen: 'Home',
         });
-        break;
-      }
-      if (user === usersList![usersList!.length - 1]) {
+      } else {
         setIsModalVisible(true);
       }
     }
   };
+
+  const user = storage.getString('currentUser');
+
+  console.log('user : ', user ? JSON.parse(user) : null);
 
   return (
     <View

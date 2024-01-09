@@ -3,9 +3,9 @@ import {getUserFavMoviesList} from '@/api/moviesApi';
 import {addToFav, removeFromFav} from '@/api/usersApi';
 import queryClient from '@/libs/reactquery/queryClient';
 import {useAppSelector} from '@/redux/hook/hook';
+import {User} from '@/types/userType';
 
-const useGetUserFavMovies = () => {
-  const currentUser = useAppSelector(state => state.user.user);
+const useGetUserFavMovies = (currentUser: User) => {
   const {data, refetch} = useQuery({
     queryKey: ['user-fav-movies', currentUser.id],
     queryFn: getUserFavMoviesList,

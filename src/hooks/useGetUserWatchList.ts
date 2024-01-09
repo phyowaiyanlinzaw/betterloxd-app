@@ -5,9 +5,9 @@ import {useMutation, useQuery} from '@tanstack/react-query';
 import {addToWatchList, removeFromWatchList} from '@/api/usersApi';
 import queryClient from '@/libs/reactquery/queryClient';
 import {useAppSelector} from '@/redux/hook/hook';
+import currentUser from '@/utils/getCurrentUser';
 
 const useGetUserWatchList = () => {
-  const currentUser = useAppSelector(state => state.user.user);
   const {data} = useQuery({
     queryKey: ['user-watch-list', currentUser.id],
     queryFn: getUserWatchList,

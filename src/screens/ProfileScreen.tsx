@@ -6,31 +6,20 @@ import HorizontalList from '@/components/HorizontalList';
 import useGetUserWatchList from '@/hooks/useGetUserWatchList';
 import {useNavigation} from '@react-navigation/native';
 import {useAppDispatch, useAppSelector} from '@/redux/hook/hook';
-import {getUser} from '@/utils/getCurrentUser';
+
 import {setUser} from '@/redux/features/userSlice';
 import {getWidthHeightStuff} from '@/utils/getWidthHeightStuff';
+import currentUser from '@/utils/getCurrentUser';
 
 type Props = HomeDrawerProps<'Profile'>;
 type Navigation = Props['navigation'];
 
 const ProfileScreen: FC<Props> = () => {
   const navigation = useNavigation<Navigation>();
-  const {userFavMovies, refetchFavs} = useGetUserFavMovies();
+
   const {userWatchList} = useGetUserWatchList();
 
-  useEffect(() => {
-    getCurrentUser().then(user => {
-      dispatch(setUser(user));
-    });
-  }, []);
-
-  const currentUserFromStore = useAppSelector(state => state.user.user);
-
-  useEffect(() => {
-    setTimeout(() => {
-      refetchFavs();
-    }, 500);
-  }, [userFavMovies]);
+  const {userFavMovies} = useGetUserFavMovies(currentUser);
 
   const favMoviesData = useMemo(() => {
     if (!userFavMovies) {
@@ -52,14 +41,7 @@ const ProfileScreen: FC<Props> = () => {
     }));
   }, [userWatchList]);
 
-  const dispatch = useAppDispatch();
-
-  const getCurrentUser = async () => {
-    const user = await getUser();
-    return user;
-  };
-
-  const {RPH, RPW} = getWidthHeightStuff();
+  const {RPH} = getWidthHeightStuff();
 
   return (
     <ScrollView
@@ -87,7 +69,7 @@ const ProfileScreen: FC<Props> = () => {
             fontSize: 50,
             color: '#15181D',
           }}>
-          {currentUserFromStore.name.charAt(0)}
+          {currentUser.name.charAt(0)}
         </Text>
       </View>
       <View
@@ -101,7 +83,7 @@ const ProfileScreen: FC<Props> = () => {
             fontWeight: 'bold',
             textAlign: 'center',
           }}>
-          {currentUserFromStore.name}
+          {currentUser.name}
         </Text>
         <Text
           style={{
@@ -109,7 +91,7 @@ const ProfileScreen: FC<Props> = () => {
             fontSize: 12,
             textAlign: 'center',
           }}>
-          {currentUserFromStore.email}
+          {currentUser.email}
         </Text>
       </View>
       <View
@@ -118,9 +100,6 @@ const ProfileScreen: FC<Props> = () => {
           borderRadius: 10,
         }}>
         <Pressable
-          onPress={() => {
-            refetchFavs();
-          }}
           style={{
             flexDirection: 'row',
             alignItems: 'center',

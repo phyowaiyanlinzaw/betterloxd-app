@@ -1,5 +1,3 @@
-import {View, Text} from 'react-native';
-import React from 'react';
 import {useQuery} from '@tanstack/react-query';
 import {getUsersList} from '@/api/usersApi';
 import {User} from '@/types/userType';
@@ -10,8 +8,10 @@ const useGetUsersList = () => {
     queryFn: getUsersList,
   });
 
+  const usersList: User[] = data ? data : [];
+
   return {
-    usersList: data,
+    usersList: usersList,
     isLoadingUsersList: isLoading,
     isErrorUsersList: isError,
     usersListError: error,

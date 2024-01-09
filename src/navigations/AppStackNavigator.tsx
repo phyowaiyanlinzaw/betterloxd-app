@@ -6,12 +6,16 @@ import LogInScreen from '@/screens/LogInScreen';
 import AppDrawerNavigator from './AppDrawerNavigator';
 import RegisterScreen from '@/screens/RegisterScreen';
 import TestScreen from '@/screens/TestScreen';
-import {useAppSelector} from '@/redux/hook/hook';
+
+import {storage} from '@/db/storage';
 
 const Stack = createNativeStackNavigator<RootStackParamsList>();
 
+const currentUserString = storage.getString('currentUser');
+
+const currentUser = currentUserString ? JSON.parse(currentUserString) : null;
+
 const AppStackNavigator = () => {
-  const currentUser = useAppSelector(state => state.user.user);
   return (
     <Stack.Navigator
       screenOptions={{
@@ -19,10 +23,7 @@ const AppStackNavigator = () => {
           backgroundColor: '#15181D',
         },
       }}
-      initialRouteName={
-        currentUser.isLoggedInBefore ? 'HomeScreen' : 'LoginScreen'
-        // 'TestScreen'
-      }>
+      initialRouteName={currentUser ? 'HomeScreen' : 'LoginScreen'}>
       <Stack.Screen
         name={'HomeScreen'}
         component={AppDrawerNavigator}

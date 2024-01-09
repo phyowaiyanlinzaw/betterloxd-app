@@ -17,6 +17,7 @@ import {getWidthHeightStuff} from '@/utils/getWidthHeightStuff';
 import {useToast} from 'react-native-toast-notifications';
 import {getCurrentUser} from '@/api/usersApi';
 import {setUser} from '@/redux/features/userSlice';
+import currentUser from '@/utils/getCurrentUser';
 
 const ScreenHeader: FC<AnimationProps> = ({sv, movie, onBackNav}) => {
   const inset = useSafeAreaInsets();
@@ -61,12 +62,11 @@ const ScreenHeader: FC<AnimationProps> = ({sv, movie, onBackNav}) => {
 
   const [isModalVisible, setModalVisible] = useState(false);
 
-  const currentUser = useAppSelector(state => state.user.user);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     const getUserData = async () => {
-      const user = await getCurrentUser();
+      const user = await getCurrentUser(currentUser.id);
       return user;
     };
     getUserData().then(user => {
@@ -74,7 +74,8 @@ const ScreenHeader: FC<AnimationProps> = ({sv, movie, onBackNav}) => {
     });
   }, []);
 
-  const {handleAddToFav, handleRemoveFromFav} = useGetUserFavMovies();
+  const {handleAddToFav, handleRemoveFromFav} =
+    useGetUserFavMovies(currentUser);
   const {handleAddToWatchList, handleRemoveFromWatchList} =
     useGetUserWatchList();
 

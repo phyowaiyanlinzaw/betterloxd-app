@@ -8,6 +8,7 @@ import useGetTopRatedMovies from '@/hooks/useGetTopRatedMovies';
 import {useNavigation} from '@react-navigation/native';
 import useGetUpcomingMovies from '@/hooks/useGetUpcomingMovies';
 import {useAppSelector} from '@/redux/hook/hook';
+import {storage} from '@/db/storage';
 
 type HomeScreenProps = HomeDrawerProps<'Home'>;
 type Navigation = HomeScreenProps['navigation'];
