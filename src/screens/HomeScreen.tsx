@@ -28,7 +28,12 @@ const HomeScreen: FC<HomeScreenProps> = () => {
     hasNextPageTopRatedMovies,
   } = useGetTopRatedMovies();
 
-  const {upcomingMoviesData} = useGetUpcomingMovies();
+  const {
+    upcomingMoviesData,
+    fetchNextPageUpcomingMovies,
+    isFetchingNextPageUpcomingMovies,
+    hasNextPageUpcomingMovies,
+  } = useGetUpcomingMovies();
 
   const currentUserStore = useAppSelector(state => state.user);
 
@@ -60,7 +65,7 @@ const HomeScreen: FC<HomeScreenProps> = () => {
     if (!upcomingMoviesData) {
       return [];
     }
-    return upcomingMoviesData.results.map(movie => ({
+    return upcomingMoviesData.map(movie => ({
       id: movie.id,
       imagePath: movie.poster_path,
     }));
@@ -152,6 +157,9 @@ const HomeScreen: FC<HomeScreenProps> = () => {
                 movieId: id,
               });
             }}
+            onEndReachFetchFunc={fetchNextPageUpcomingMovies}
+            isFetchingNextPage={isFetchingNextPageUpcomingMovies}
+            hasNextPage={hasNextPageUpcomingMovies}
           />
         </View>
       </View>
