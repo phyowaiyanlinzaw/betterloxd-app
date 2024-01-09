@@ -1,15 +1,13 @@
-import {View, Text, TouchableOpacity, ScrollView} from 'react-native';
+import {View, Text, ScrollView} from 'react-native';
 import React, {FC, useMemo} from 'react';
 
-import {HomeDrawerProps, RootStackProps} from '@/types/navigationType';
+import {HomeDrawerProps} from '@/types/navigationType';
 import useGetPopularMovies from '@/hooks/useGetPopularMovies';
 import HorizontalList from '@/components/HorizontalList';
 import useGetTopRatedMovies from '@/hooks/useGetTopRatedMovies';
 import {useNavigation} from '@react-navigation/native';
 import useGetUpcomingMovies from '@/hooks/useGetUpcomingMovies';
-import {storage} from '@/db/storage';
 import {useAppSelector} from '@/redux/hook/hook';
-import currentUser from '@/utils/getCurrentUser';
 
 type HomeScreenProps = HomeDrawerProps<'Home'>;
 type Navigation = HomeScreenProps['navigation'];

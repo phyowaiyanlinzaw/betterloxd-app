@@ -29,7 +29,7 @@ const LogInScreen: FC<LogInScreenProps> = () => {
   const dispatch = useAppDispatch();
   const testUser = useAppSelector(state => state.user);
 
-  console.log('Log In Screen test user : ', testUser);
+  // console.log('Log In Screen test user : ', testUser);
 
   const cu = async () => {
     return await getUser();
@@ -37,7 +37,7 @@ const LogInScreen: FC<LogInScreenProps> = () => {
 
   useEffect(() => {
     cu().then(user => {
-      console.log('Log In Screen current user : ', user);
+      // console.log('Log In Screen current user : ', user);
     });
   }, []);
 

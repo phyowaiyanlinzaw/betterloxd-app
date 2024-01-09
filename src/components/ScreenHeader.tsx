@@ -14,11 +14,11 @@ import {AddIcon, HeartIcon} from '@/assets/icons';
 import currentUser from '@/utils/getCurrentUser';
 import useGetUserFavMovies from '@/hooks/useGetUserFavMovies';
 import useGetUserWatchList from '@/hooks/useGetUserWatchList';
+import {useAppSelector} from '@/redux/hook/hook';
 
 const ScreenHeader: FC<AnimationProps> = ({sv, movie, onBackNav}) => {
   const inset = useSafeAreaInsets();
-  const {formatter, AnimatedLinearGradient, posterSize, headerTop} =
-    getDetailsScreenConst();
+  const {posterSize, headerTop} = getDetailsScreenConst();
   const opacityAnim = useAnimatedStyle(() => {
     return {
       opacity: interpolate(
@@ -59,7 +59,7 @@ const ScreenHeader: FC<AnimationProps> = ({sv, movie, onBackNav}) => {
 
   const [isModalVisible, setModalVisible] = useState(false);
 
-  // const {addToFav} = useAddToFav();
+  const currentUser = useAppSelector(state => state.user);
 
   const {handleAddToFav} = useGetUserFavMovies();
   const {handleAddToWatchList} = useGetUserWatchList();

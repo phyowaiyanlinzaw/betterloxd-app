@@ -7,6 +7,7 @@ import useGetUserWatchList from '@/hooks/useGetUserWatchList';
 import {useNavigation} from '@react-navigation/native';
 import {useAppDispatch, useAppSelector} from '@/redux/hook/hook';
 import {getUser} from '@/utils/getCurrentUser';
+import {setUser} from '@/redux/features/userSlice';
 
 type Props = HomeDrawerProps<'Profile'>;
 type Navigation = Props['navigation'];
@@ -43,17 +44,19 @@ const ProfileScreen: FC<Props> = () => {
   }, [userWatchList]);
 
   const dispatch = useAppDispatch();
+
+  // const cu = async () => {
+  //   const user = await getUser();
+  //   return user;
+  // };
+
+  // useEffect(() => {
+  //   cu().then(user => {
+  //     dispatch(setUser(user));
+  //   });
+  // }, []);
+
   const currentUser = useAppSelector(state => state.user.user);
-
-  const cu = async () => {
-    return await getUser();
-  };
-
-  useEffect(() => {
-    cu().then(user => {
-      console.log('Log In Screen current user : ', user);
-    });
-  }, []);
 
   return (
     <ScrollView
@@ -95,7 +98,7 @@ const ProfileScreen: FC<Props> = () => {
             fontWeight: 'bold',
             textAlign: 'center',
           }}>
-          {currentUser?.name}
+          {currentUser.name}
         </Text>
         <Text
           style={{
