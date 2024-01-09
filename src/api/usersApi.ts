@@ -79,11 +79,10 @@ export const getUser = async ({queryKey}: QueryFunctionContext) => {
   }
 };
 
-export const getCurrentUser = async ({queryKey}: QueryFunctionContext) => {
+export const getCurrentUser = async () => {
   try {
-    const [_key, userId] = queryKey;
     const response: AxiosResponse<User> = await usersAxiosInstance.get(
-      `/${userId}`,
+      `/${currentUser.id}`,
     );
     return response.data;
   } catch (err) {

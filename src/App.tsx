@@ -7,23 +7,27 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {Provider} from 'react-redux';
 import store, {persistor} from './redux/store';
 import {PersistGate} from 'redux-persist/integration/react';
+import Toast, {BaseToast} from 'react-native-toast-message';
+import {ToastProvider} from 'react-native-toast-notifications';
 
 const App = () => {
   return (
-    <QueryClientProvider client={queryClient}>
-      <Provider store={store}>
-        <PersistGate persistor={persistor}>
-          <SafeAreaProvider
-            style={{
-              backgroundColor: '#1B2126',
-            }}>
-            <NavigationContainer>
-              <AppStackNavigator />
-            </NavigationContainer>
-          </SafeAreaProvider>
-        </PersistGate>
-      </Provider>
-    </QueryClientProvider>
+    <ToastProvider>
+      <QueryClientProvider client={queryClient}>
+        <Provider store={store}>
+          <PersistGate persistor={persistor}>
+            <SafeAreaProvider
+              style={{
+                backgroundColor: '#1B2126',
+              }}>
+              <NavigationContainer>
+                <AppStackNavigator />
+              </NavigationContainer>
+            </SafeAreaProvider>
+          </PersistGate>
+        </Provider>
+      </QueryClientProvider>
+    </ToastProvider>
   );
 };
 

@@ -15,6 +15,9 @@ import currentUser from '@/utils/getCurrentUser';
 import useGetUserFavMovies from '@/hooks/useGetUserFavMovies';
 import useGetUserWatchList from '@/hooks/useGetUserWatchList';
 import {useAppSelector} from '@/redux/hook/hook';
+import {getWidthHeightStuff} from '@/utils/getWidthHeightStuff';
+import Toast from 'react-native-toast-message';
+import {useToast} from 'react-native-toast-notifications';
 
 const ScreenHeader: FC<AnimationProps> = ({sv, movie, onBackNav}) => {
   const inset = useSafeAreaInsets();
@@ -59,7 +62,7 @@ const ScreenHeader: FC<AnimationProps> = ({sv, movie, onBackNav}) => {
 
   const [isModalVisible, setModalVisible] = useState(false);
 
-  const currentUser = useAppSelector(state => state.user);
+  const currentUser = useAppSelector(state => state.user.user);
 
   const {handleAddToFav} = useGetUserFavMovies();
   const {handleAddToWatchList} = useGetUserWatchList();
@@ -67,6 +70,23 @@ const ScreenHeader: FC<AnimationProps> = ({sv, movie, onBackNav}) => {
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
+
+  const toast = useToast();
+
+  const showToast = () => {
+    toast.show('Success', {
+      type: 'success',
+      placement: 'bottom',
+      duration: 4000,
+      animationType: 'zoom-in',
+    });
+  };
+
+  const {RPH} = getWidthHeightStuff();
+
+  const isAlreadyInUserFav = currentUser?.favs?.includes(movie?.id!);
+  const isAlreadyInUserWatchList = currentUser?.watchlist?.includes(movie?.id!);
+
   return (
     <Animated.View
       style={[
@@ -119,8 +139,7 @@ const ScreenHeader: FC<AnimationProps> = ({sv, movie, onBackNav}) => {
         <View
           style={{
             backgroundColor: '#15181D',
-            height: 150,
-
+            height: RPH(30),
             borderTopLeftRadius: 10,
             borderTopRightRadius: 10,
             padding: 10,
@@ -130,26 +149,37 @@ const ScreenHeader: FC<AnimationProps> = ({sv, movie, onBackNav}) => {
           }}>
           <View
             style={{
-              width: 50,
-              height: 50,
+              width: 80,
+              height: 80,
               margin: 5,
+              borderColor: '#8899AA',
+              borderWidth: 3,
+              borderRadius: 50,
+              justifyContent: 'center',
+              alignItems: 'center',
+              backgroundColor: isAlreadyInUserWatchList
+                ? '#8899AA'
+                : 'transparent',
             }}>
-            <AddIcon
+            <Text
               onPress={
                 currentUser
                   ? () => {
                       handleAddToWatchList(movie?.id!);
                       toggleModal();
+                      showToast();
                     }
                   : () => {
                       toggleModal();
                     }
               }
               style={{
-                width: '100%',
-                height: '100%',
-              }}
-            />
+                color: isAlreadyInUserWatchList ? '#15181D' : '#8899AA',
+                fontSize: 40,
+                fontWeight: 'bold',
+              }}>
+              ✚
+            </Text>
           </View>
           <View
             style={{
@@ -159,26 +189,24 @@ const ScreenHeader: FC<AnimationProps> = ({sv, movie, onBackNav}) => {
             }}></View>
           <View
             style={{
-              width: 50,
-              height: 50,
+              width: 80,
+              height: 80,
               margin: 5,
+              borderColor: '#8899AA',
+              borderWidth: 3,
+              borderRadius: 50,
+              justifyContent: 'center',
+              alignItems: 'center',
+              backgroundColor: isAlreadyInUserFav ? '#8899AA' : 'transparent',
             }}>
-            <HeartIcon
-              onPress={
-                currentUser
-                  ? () => {
-                      handleAddToFav(movie?.id!);
-                      toggleModal();
-                    }
-                  : () => {
-                      toggleModal();
-                    }
-              }
+            <Text
               style={{
-                width: '100%',
-                height: '100%',
-              }}
-            />
+                color: isAlreadyInUserFav ? '#15181D' : '#8899AA',
+                fontSize: 40,
+                fontWeight: 'bold',
+              }}>
+              ♥
+            </Text>
           </View>
         </View>
       </Modal>

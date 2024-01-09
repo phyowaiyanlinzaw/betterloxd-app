@@ -8,6 +8,9 @@ import {useNavigation} from '@react-navigation/native';
 import {useAppDispatch, useAppSelector} from '@/redux/hook/hook';
 import {getUser} from '@/utils/getCurrentUser';
 import {setUser} from '@/redux/features/userSlice';
+import {getCurrentUser} from '@/api/usersApi';
+import {User} from '@/types/userType';
+import {get} from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 
 type Props = HomeDrawerProps<'Profile'>;
 type Navigation = Props['navigation'];
@@ -45,18 +48,18 @@ const ProfileScreen: FC<Props> = () => {
 
   const dispatch = useAppDispatch();
 
-  // const cu = async () => {
-  //   const user = await getUser();
-  //   return user;
-  // };
+  const currentUserFromStore = useAppSelector(state => state.user.user);
 
-  // useEffect(() => {
-  //   cu().then(user => {
-  //     dispatch(setUser(user));
-  //   });
-  // }, []);
+  const getCurrentUser = async () => {
+    const user = await getUser();
+    return user;
+  };
 
-  const currentUser = useAppSelector(state => state.user.user);
+  useEffect(() => {
+    getCurrentUser().then(user => {
+      dispatch(setUser(user));
+    });
+  }, [currentUserFromStore.favs, currentUserFromStore.watchlist]);
 
   return (
     <ScrollView
@@ -84,7 +87,7 @@ const ProfileScreen: FC<Props> = () => {
             fontSize: 50,
             color: '#15181D',
           }}>
-          {currentUser?.name?.charAt(0)}
+          {currentUserFromStore.name.charAt(0)}
         </Text>
       </View>
       <View
@@ -98,7 +101,7 @@ const ProfileScreen: FC<Props> = () => {
             fontWeight: 'bold',
             textAlign: 'center',
           }}>
-          {currentUser.name}
+          {currentUserFromStore.name}
         </Text>
         <Text
           style={{
@@ -106,7 +109,7 @@ const ProfileScreen: FC<Props> = () => {
             fontSize: 12,
             textAlign: 'center',
           }}>
-          {currentUser?.email}
+          {currentUserFromStore.email}
         </Text>
       </View>
       <View

@@ -5,7 +5,6 @@ import DetailsScreen from '@/screens/DetailsScreen';
 import LogInScreen from '@/screens/LogInScreen';
 import AppDrawerNavigator from './AppDrawerNavigator';
 import RegisterScreen from '@/screens/RegisterScreen';
-import currentUser from '@/utils/getCurrentUser';
 import TestScreen from '@/screens/TestScreen';
 import {useAppSelector} from '@/redux/hook/hook';
 

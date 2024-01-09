@@ -35,8 +35,6 @@ const HomeScreen: FC<HomeScreenProps> = () => {
 
   const currentUserStore = useAppSelector(state => state.user);
 
-  console.log('currentUserStore Homescreen', currentUserStore);
-
   const popularMovies = useMemo(() => {
     if (!popularMoviesData) {
       return [];

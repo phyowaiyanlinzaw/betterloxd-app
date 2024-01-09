@@ -5,48 +5,24 @@
       "name": "Phyo Phyo Lay",
       "email": "phyo2lay@email.com",
       "favs": [
-        901362,
-        1075794,
-        240,
-        680,
-        787699,
-        129,
-        12477,
-        637,
-        385687,
-        891699,
-        14062,
-        792307,
-        84111
+        901362, 1075794, 240, 680, 787699, 129, 12477, 637, 385687, 891699,
+        14062, 792307, 84111
       ],
       "password": "123456",
-      "watchlist": [
-        572802,
-        787699,
-        14062
-      ],
+      "watchlist": [572802, 787699, 14062],
       "isLoggedInBefore": false
     },
     {
-      "email": "mgmg@email.com",
-      "password": "mglay8834",
-      "isLoggedInBefore": true,
+      "email": "phyo2lay@email.com",
+      "password": "123456",
+      "isLoggedInBefore": false,
       "id": 2,
       "favs": [
-        238,
-        240,
-        129,
-        155,
-        680,
-        37799
+        901362, 1075794, 240, 680, 787699, 129, 12477, 637, 385687, 891699,
+        14062, 792307, 84111
       ],
-      "watchlist": [
-        1029575,
-        496243,
-        372058,
-        940721
-      ],
-      "name": "mgmg"
+      "watchlist": [572802, 787699, 14062, 8355],
+      "name": "Phyo Phyo Lay"
     }
   ]
 }

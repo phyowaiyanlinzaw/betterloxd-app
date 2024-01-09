@@ -1,13 +1,11 @@
-import {Text, Pressable, ActivityIndicator, View} from 'react-native';
-import React, {FC, useEffect} from 'react';
+import {Text, Pressable, ActivityIndicator} from 'react-native';
+import React, {FC} from 'react';
 import {RootStackProps} from '@/types/navigationType';
 import Animated, {
-  interpolate,
   useAnimatedScrollHandler,
   useAnimatedStyle,
   useSharedValue,
 } from 'react-native-reanimated';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import tailwind from 'twrnc';
 import useGetMovieDetails from '@/hooks/useGetMovieDetails';
 import {useNavigation} from '@react-navigation/native';
@@ -29,14 +27,12 @@ export type PlaylistType = {
 
 const DetailsScreen: FC<DetailsScreenProps> = ({route}) => {
   const navigation = useNavigation<Navigation>();
-  const {formatter, AnimatedLinearGradient, posterSize, headerTop} =
-    getDetailsScreenConst();
+  const {posterSize} = getDetailsScreenConst();
 
   const {movieDetailsData, isLoading} = useGetMovieDetails(
     route.params.movieId,
   );
 
-  const inset = useSafeAreaInsets();
   const sv = useSharedValue<number>(0);
   const scrollHandler = useAnimatedScrollHandler({
     onScroll: event => {
@@ -53,25 +49,6 @@ const DetailsScreen: FC<DetailsScreenProps> = ({route}) => {
     };
   });
 
-  const layoutY = useSharedValue(0);
-  const stickyElement = useAnimatedStyle(() => {
-    return {
-      backgroundColor: 'black',
-      transform: [
-        {
-          translateY: interpolate(
-            sv.value,
-            [
-              layoutY.value - (headerTop + inset.top) - 1,
-              layoutY.value - (headerTop + inset.top),
-              layoutY.value - (headerTop + inset.top) + 1,
-            ],
-            [0, 0, 1],
-          ),
-        },
-      ],
-    };
-  });
   return isLoading ? (
     <ActivityIndicator
       size={50}
