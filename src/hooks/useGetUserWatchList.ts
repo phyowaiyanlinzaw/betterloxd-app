@@ -1,11 +1,11 @@
-import {View, Text} from 'react-native';
-import React from 'react';
-import {getUserFavMoviesList, getUserWatchList} from '@/api/moviesApi';
+import {getUserWatchList} from '@/api/moviesApi';
 import {useMutation, useQuery} from '@tanstack/react-query';
 import {addToWatchList, removeFromWatchList} from '@/api/usersApi';
 import queryClient from '@/libs/reactquery/queryClient';
-import {useAppSelector} from '@/redux/hook/hook';
-import currentUser from '@/utils/getCurrentUser';
+import {storage} from '@/db/storage';
+
+const currentStringUser = storage.getString('currentUser');
+const currentUser = currentStringUser ? JSON.parse(currentStringUser) : null;
 
 const useGetUserWatchList = () => {
   const {data} = useQuery({

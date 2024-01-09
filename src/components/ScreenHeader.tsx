@@ -17,9 +17,12 @@ import {getWidthHeightStuff} from '@/utils/getWidthHeightStuff';
 import {useToast} from 'react-native-toast-notifications';
 import {getCurrentUser} from '@/api/usersApi';
 import {setUser} from '@/redux/features/userSlice';
-import currentUser from '@/utils/getCurrentUser';
+import {storage} from '@/db/storage';
 
 const ScreenHeader: FC<AnimationProps> = ({sv, movie, onBackNav}) => {
+  const stringCurrentUser = storage.getString('currentUser');
+  const currentUser = stringCurrentUser ? JSON.parse(stringCurrentUser) : null;
+
   const inset = useSafeAreaInsets();
   const {posterSize, headerTop} = getDetailsScreenConst();
   const opacityAnim = useAnimatedStyle(() => {

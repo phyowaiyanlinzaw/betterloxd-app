@@ -9,12 +9,16 @@ import {useAppDispatch, useAppSelector} from '@/redux/hook/hook';
 
 import {setUser} from '@/redux/features/userSlice';
 import {getWidthHeightStuff} from '@/utils/getWidthHeightStuff';
-import currentUser from '@/utils/getCurrentUser';
+
+import {storage} from '@/db/storage';
 
 type Props = HomeDrawerProps<'Profile'>;
 type Navigation = Props['navigation'];
 
 const ProfileScreen: FC<Props> = () => {
+  const currentUserString = storage.getString('currentUser');
+
+  const currentUser = currentUserString ? JSON.parse(currentUserString) : null;
   const navigation = useNavigation<Navigation>();
 
   const {userWatchList} = useGetUserWatchList();

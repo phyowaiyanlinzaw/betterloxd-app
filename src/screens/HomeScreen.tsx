@@ -34,8 +34,6 @@ const HomeScreen: FC<HomeScreenProps> = () => {
     hasNextPageUpcomingMovies,
   } = useGetUpcomingMovies();
 
-  const currentUserStore = useAppSelector(state => state.user);
-
   const popularMovies = useMemo(() => {
     if (!popularMoviesData) {
       return [];
@@ -69,6 +67,8 @@ const HomeScreen: FC<HomeScreenProps> = () => {
   }, [upcomingMoviesData]);
 
   const navigation = useNavigation<Navigation>();
+
+  const user = storage.getString('currentUser');
 
   return (
     <ScrollView

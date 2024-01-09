@@ -1,10 +1,7 @@
 import usersAxiosInstance from '@/libs/axios-config/usersAxiosInstance';
-import {useAppSelector} from '@/redux/hook/hook';
 import {User} from '@/types/userType';
 import {QueryFunctionContext} from '@tanstack/react-query';
-import axios, {AxiosResponse} from 'axios';
-
-// const currentUser = useAppSelector(state => state.user.user);
+import {AxiosResponse} from 'axios';
 
 export const getUsersList = async () => {
   try {

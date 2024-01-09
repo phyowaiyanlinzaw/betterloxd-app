@@ -79,10 +79,6 @@ const LogInScreen: FC<LogInScreenProps> = () => {
     }
   };
 
-  const user = storage.getString('currentUser');
-
-  console.log('user : ', user ? JSON.parse(user) : null);
-
   return (
     <View
       style={{

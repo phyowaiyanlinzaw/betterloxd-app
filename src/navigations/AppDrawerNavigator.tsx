@@ -1,32 +1,22 @@
 import {View, Text, Pressable} from 'react-native';
 import React from 'react';
 import {createDrawerNavigator} from '@react-navigation/drawer';
-import {
-  HomeDrawerParamsList,
-  RootStackParamsList,
-} from '@/types/navigationType';
+import {HomeDrawerParamsList} from '@/types/navigationType';
 import HomeScreen from '@/screens/HomeScreen';
 import SearchScreen from '@/screens/SearchScreen';
-import LogInScreen from '@/screens/LogInScreen';
 import ProfileScreen from '@/screens/ProfileScreen';
-import currentUser from '@/utils/getCurrentUser';
+
 import {storage} from '@/db/storage';
-import {MMKV} from 'react-native-mmkv';
 import {useAppDispatch, useAppSelector} from '@/redux/hook/hook';
 import {logout} from '@/redux/features/userSlice';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Drawer = createDrawerNavigator<HomeDrawerParamsList>();
 
 const AppDrawerNavigator = () => {
-  const currentUser = useAppSelector(state => state.user.user);
+  const currentUser = useAppSelector(state => state.user);
   const dispatch = useAppDispatch();
-  const deleteUser = async () => {
-    try {
-      await AsyncStorage.removeItem('currentUser');
-    } catch (err) {
-      console.log(err);
-    }
+  const deleteUser = () => {
+    storage.delete('currentUser');
   };
   return (
     <Drawer.Navigator
