@@ -7,6 +7,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import React, {FC} from 'react';
+import FastImage from 'react-native-fast-image';
 
 type ListItem = {
   id: number;
@@ -74,16 +75,17 @@ const HorizontalList: FC<{
               onPress={() => {
                 onPressItem && onPressItem(item.id);
               }}>
-              <Image
+              <FastImage
                 style={{
                   width: '100%',
                   height: '100%',
                 }}
-                src={
-                  item.imagePath
+                source={{
+                  uri: item.imagePath
                     ? `https://image.tmdb.org/t/p/original${item.imagePath}`
-                    : 'https://via.placeholder.com/100x150.png?text=No+Image'
-                }
+                    : 'https://via.placeholder.com/100x150.png?text=No+Image',
+                }}
+                resizeMode={FastImage.resizeMode.cover}
               />
             </TouchableOpacity>
             {item.label && (
