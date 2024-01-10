@@ -82,6 +82,8 @@ export const addToWatchList = async ({userId, movieId}: AddToSmthParams) => {
       watchlist: [...userToUpdate.data.watchlist, movieId],
     };
 
+    console.log('updatedData', updatedData);
+
     const response: AxiosResponse<User> = await usersAxiosInstance.patch(
       `/${userId}`,
       updatedData,

@@ -8,6 +8,7 @@ const currentStringUser = storage.getString('currentUser');
 const currentUser = currentStringUser ? JSON.parse(currentStringUser) : null;
 
 const useGetUserWatchList = () => {
+  console.log('currentUser', currentUser);
   const {data} = useQuery({
     queryKey: ['user-watch-list', currentUser.id],
     queryFn: getUserWatchList,
@@ -28,6 +29,9 @@ const useGetUserWatchList = () => {
       movieId,
       userId: currentUser.id,
     });
+
+    console.log('movieId', movieId);
+    console.log('currentUser.id', currentUser.id);
   };
 
   const removeFromWatchListMutation = useMutation({

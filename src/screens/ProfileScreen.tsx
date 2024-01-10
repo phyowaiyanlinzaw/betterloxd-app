@@ -103,6 +103,29 @@ const ProfileScreen: FC<Props> = () => {
           paddingHorizontal: 5,
           borderRadius: 10,
         }}>
+        <Text
+          style={{
+            color: '#8899AA',
+            fontSize: 20,
+            fontWeight: 'bold',
+            padding: 10,
+          }}>
+          Watch List
+        </Text>
+        <HorizontalList
+          data={watchListData}
+          onPressItem={id => {
+            navigation.navigate('DetailsScreen', {
+              movieId: id,
+            });
+          }}
+        />
+      </View>
+      <View
+        style={{
+          paddingHorizontal: 5,
+          borderRadius: 10,
+        }}>
         <Pressable
           style={{
             flexDirection: 'row',
@@ -120,29 +143,6 @@ const ProfileScreen: FC<Props> = () => {
         </Pressable>
         <HorizontalList
           data={favMoviesData}
-          onPressItem={id => {
-            navigation.navigate('DetailsScreen', {
-              movieId: id,
-            });
-          }}
-        />
-      </View>
-      <View
-        style={{
-          paddingHorizontal: 5,
-          borderRadius: 10,
-        }}>
-        <Text
-          style={{
-            color: '#8899AA',
-            fontSize: 20,
-            fontWeight: 'bold',
-            padding: 10,
-          }}>
-          Watch List
-        </Text>
-        <HorizontalList
-          data={watchListData}
           onPressItem={id => {
             navigation.navigate('DetailsScreen', {
               movieId: id,

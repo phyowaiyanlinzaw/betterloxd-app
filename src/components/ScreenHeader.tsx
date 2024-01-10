@@ -82,6 +82,10 @@ const ScreenHeader: FC<AnimationProps> = ({sv, movie, onBackNav}) => {
   const {handleAddToWatchList, handleRemoveFromWatchList} =
     useGetUserWatchList();
 
+  const addToWatchList = () => {
+    handleAddToWatchList(movie?.id!);
+  };
+
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
@@ -180,9 +184,9 @@ const ScreenHeader: FC<AnimationProps> = ({sv, movie, onBackNav}) => {
               onPress={
                 currentUser
                   ? () => {
-                      isAlreadyInUserFav
+                      isAlreadyInUserWatchList
                         ? handleRemoveFromWatchList(movie?.id!)
-                        : handleAddToWatchList(movie?.id!);
+                        : addToWatchList();
                       toggleModal();
                       showToast();
                     }
