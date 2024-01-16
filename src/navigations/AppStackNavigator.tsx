@@ -5,7 +5,6 @@ import DetailsScreen from '@/screens/DetailsScreen';
 import LogInScreen from '@/screens/LogInScreen';
 import AppDrawerNavigator from './AppDrawerNavigator';
 import RegisterScreen from '@/screens/RegisterScreen';
-import TestScreen from '@/screens/TestScreen';
 
 import {storage} from '@/db/storage';
 
@@ -74,13 +73,6 @@ const AppStackNavigator = () => {
         options={({navigation}) => ({
           headerShown: false,
         })}
-      />
-      <Stack.Screen
-        name={'TestScreen'}
-        component={TestScreen}
-        options={{
-          headerShown: false,
-        }}
       />
     </Stack.Navigator>
   );

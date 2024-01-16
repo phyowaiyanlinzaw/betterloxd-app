@@ -13,7 +13,7 @@ const useGetUserFavMovies = (currentUser: User) => {
 
   const {mutateAsync} = useMutation({
     mutationKey: ['add-to-fav'],
-    mutationFn: removeFromFav,
+    mutationFn: addToFav,
     onSuccess: () => {
       return queryClient.invalidateQueries({
         queryKey: ['user-fav-movies', currentUser.id],
@@ -30,7 +30,7 @@ const useGetUserFavMovies = (currentUser: User) => {
 
   const removeFromFavMutate = useMutation({
     mutationKey: ['remove-from-fav'],
-    mutationFn: addToFav,
+    mutationFn: removeFromFav,
     onSuccess: () => {
       return queryClient.invalidateQueries({
         queryKey: ['user-fav-movies', currentUser.id],
